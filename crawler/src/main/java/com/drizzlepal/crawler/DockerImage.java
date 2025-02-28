@@ -63,7 +63,7 @@ public class DockerImage {
         res.append("# docker 镜像更新请执行以下命令：\n");
         res.append(stringJoiner.toString());
         res.append("# 重启docker服务\n" + //
-                "sudo systemctl daemon-reload && sudo systemctl restart docker");
+                "sudo systemctl daemon-reload && sudo systemctl restart docker && sudo docker info");
         System.out.println(res.toString());
     }
 
