@@ -15,6 +15,7 @@
         <module>rpc</module>
         <module>springboot</module>
         <module>crawler</module>
+        <module>utils</module>
     </modules>
 
     <properties>
