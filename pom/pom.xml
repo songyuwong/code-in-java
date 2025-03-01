@@ -22,6 +22,16 @@
                 <artifactId>webstarter</artifactId>
                 <version>${revision}</version>
             </dependency>
+            <dependency>
+                <groupId>com.drizzlepal</groupId>
+                <artifactId>utils</artifactId>
+                <version>${revision}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.drizzlepal.springboot</groupId>
+                <artifactId>miniostarter</artifactId>
+                <version>${revision}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
