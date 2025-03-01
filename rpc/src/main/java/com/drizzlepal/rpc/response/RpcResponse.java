@@ -1,6 +1,5 @@
 package com.drizzlepal.rpc.response;
 
-import com.alibaba.fastjson2.JSON;
 import com.drizzlepal.rpc.exception.RpcException;
 
 import lombok.Data;
@@ -17,7 +16,7 @@ public abstract class RpcResponse {
     protected Object data;
 
     public static RpcFaildResponse failed(Throwable cause) {
-        return new RpcFaildResponse(JSON.toJSONString(cause));
+        return new RpcFaildResponse(cause);
     }
 
     public static RpcFaildResponse failed(RpcException cause) {
@@ -29,7 +28,7 @@ public abstract class RpcResponse {
     }
 
     public static RpcFaildResponse failed(Throwable cause, Object data) {
-        return new RpcFaildResponse(JSON.toJSONString(cause), data);
+        return new RpcFaildResponse(cause, data);
     }
 
     public static RpcFaildResponse failed(RpcException cause, Object data) {

@@ -15,9 +15,9 @@ public class RpcFaildResponse extends RpcResponse {
     /**
      * 错误信息
      */
-    private String message;
+    private Object message;
 
-    public RpcFaildResponse(String message, Object data) {
+    public RpcFaildResponse(Object message, Object data) {
         this.message = message;
         this.data = data;
     }
