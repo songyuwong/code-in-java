@@ -8,13 +8,14 @@ import java.util.concurrent.TimeUnit;
 
 import com.drizzlepal.springboot.miniostarter.exception.DrizzlepalMinioObjectOpException;
 import com.drizzlepal.springboot.miniostarter.props.DrizzlepalMinioStarterProps;
-import com.google.common.net.MediaType;
 
 import io.minio.BucketExistsArgs;
 import io.minio.GetObjectArgs;
 import io.minio.MakeBucketArgs;
 import io.minio.MinioClient;
 import io.minio.PutObjectArgs;
+import io.minio.RemoveBucketArgs;
+import io.minio.RemoveObjectArgs;
 import io.minio.errors.ErrorResponseException;
 import io.minio.errors.InsufficientDataException;
 import io.minio.errors.InternalException;
@@ -44,32 +45,6 @@ public class MinioTemplate {
                 .build();
     }
 
-    public void putImage(String bucketName, String objectName, String filePath)
-            throws DrizzlepalMinioObjectOpException {
-        try {
-            if (!minioClient.bucketExists(BucketExistsArgs.builder().bucket(bucketName).build())) {
-                minioClient.makeBucket(MakeBucketArgs.builder().bucket(bucketName).build());
-            }
-            minioClient.putObject(PutObjectArgs.builder().bucket(bucketName).object(objectName)
-                    .contentType(MediaType.ANY_IMAGE_TYPE.toString()).build());
-        } catch (InvalidKeyException | ErrorResponseException | InsufficientDataException | InternalException
-                | InvalidResponseException | NoSuchAlgorithmException | ServerException | XmlParserException
-                | IllegalArgumentException | IOException e) {
-            throw new DrizzlepalMinioObjectOpException("put image error", e);
-        }
-    }
-
-    public InputStream getImage(String bucketName, String objectName) throws DrizzlepalMinioObjectOpException {
-        try {
-            return minioClient
-                    .getObject(GetObjectArgs.builder().bucket(bucketName).object(objectName).build());
-        } catch (InvalidKeyException | ErrorResponseException | InsufficientDataException | InternalException
-                | InvalidResponseException | NoSuchAlgorithmException | ServerException | XmlParserException
-                | IllegalArgumentException | IOException e) {
-            throw new DrizzlepalMinioObjectOpException("get image error", e);
-        }
-    }
-
     public void makeSureBucketExists(String bucketName) throws DrizzlepalMinioObjectOpException {
         try {
             if (!minioClient.bucketExists(BucketExistsArgs.builder().bucket(bucketName).build())) {
@@ -79,6 +54,47 @@ public class MinioTemplate {
                 | InvalidResponseException | NoSuchAlgorithmException | ServerException | XmlParserException
                 | IllegalArgumentException | IOException e) {
             throw new DrizzlepalMinioObjectOpException("make sure bucket exists error", e);
+        }
+    }
+
+    public void deleteImage(String bucketName, String objectName) throws DrizzlepalMinioObjectOpException {
+        try {
+            minioClient.removeObject(
+                    RemoveObjectArgs.builder().bucket(bucketName).object(objectName).build());
+        } catch (InvalidKeyException | ErrorResponseException | InsufficientDataException | InternalException
+                | InvalidResponseException | NoSuchAlgorithmException | ServerException | XmlParserException
+                | IllegalArgumentException | IOException e) {
+        }
+    }
+
+    public void deleteBucket(String bucketName) throws DrizzlepalMinioObjectOpException {
+        try {
+            minioClient.removeBucket(RemoveBucketArgs.builder().bucket(bucketName).build());
+        } catch (InvalidKeyException | ErrorResponseException | InsufficientDataException | InternalException
+                | InvalidResponseException | NoSuchAlgorithmException | ServerException | XmlParserException
+                | IllegalArgumentException | IOException e) {
+        }
+    }
+
+    public void putObject(String bucketName, String objectName, InputStream stream)
+            throws DrizzlepalMinioObjectOpException {
+        try {
+            minioClient.putObject(PutObjectArgs.builder().bucket(bucketName).object(objectName).stream(stream, -1, -1)
+                    .build());
+        } catch (InvalidKeyException | ErrorResponseException | InsufficientDataException | InternalException
+                | InvalidResponseException | NoSuchAlgorithmException | ServerException | XmlParserException
+                | IllegalArgumentException | IOException e) {
+            throw new DrizzlepalMinioObjectOpException("put object error", e);
+        }
+    }
+
+    public InputStream getObject(String bucketName, String objectName) throws DrizzlepalMinioObjectOpException {
+        try {
+            return minioClient.getObject(GetObjectArgs.builder().bucket(bucketName).object(objectName).build());
+        } catch (InvalidKeyException | ErrorResponseException | InsufficientDataException | InternalException
+                | InvalidResponseException | NoSuchAlgorithmException | ServerException | XmlParserException
+                | IllegalArgumentException | IOException e) {
+            throw new DrizzlepalMinioObjectOpException("get object error", e);
         }
     }
 
