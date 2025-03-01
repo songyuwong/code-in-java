@@ -8,7 +8,7 @@
         <version>1.0.0</version>
     </parent>
 
-    <groupId>com.drizzlepal</groupId>
+    <groupId>com.drizzlepal.springboot</groupId>
     <artifactId>miniostarter</artifactId>
     <name>drizzlepal springboot minio sdk starter</name>
     <description>drizzlepal springboot minio sdk starter 封装</description>
