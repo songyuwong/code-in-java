@@ -5,7 +5,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import lombok.Data;
 
 @Data
-@ConfigurationProperties(prefix = "drizzlepal.minio.starter")
+@ConfigurationProperties(prefix = "drizzlepal.minio")
 public class DrizzlepalMinioStarterProps {
 
     /*
