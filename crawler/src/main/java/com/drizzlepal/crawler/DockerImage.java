@@ -1,12 +1,10 @@
 package com.drizzlepal.crawler;
 
-import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.StringJoiner;
 
 import org.apache.http.HttpEntity;
-import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
@@ -18,9 +16,14 @@ import org.jsoup.select.Elements;
 /**
  * 爬取最新的可用的Docker镜像
  */
-public class DockerImage {
+public class DockerImage implements Crawler<String> {
 
-    public static void main(String[] args) throws ClientProtocolException, IOException {
+    public static void main(String[] args) throws Exception {
+        System.out.println(new DockerImage().crawl());
+    }
+
+    @Override
+    public String crawl() throws Exception {
         String html = "";
         Set<String> images = new HashSet<>();
         // 使用 httpclient 请求docker镜像分享获取html内容
@@ -64,7 +67,7 @@ public class DockerImage {
         res.append(stringJoiner.toString());
         res.append("# 重启docker服务\n" + //
                 "sudo systemctl daemon-reload && sudo systemctl restart docker && sudo docker info");
-        System.out.println(res.toString());
+        return res.toString();
     }
 
 }
