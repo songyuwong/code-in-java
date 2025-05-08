@@ -39,6 +39,7 @@ public class WebHandlerExceptionResolver extends DefaultHandlerExceptionResolver
             response.setCharacterEncoding(StandardCharsets.UTF_8.name());
             response.getWriter()
                     .write(JSON.toJSONString(RpcResponse.failed(errorResponse.getBody().getDetail())));
+            log.error("捕获到错误响应:\n{}", JSON.toJSONString(errorResponse.getBody()));
             response.flushBuffer();
         } else {
             log.warn("Ignoring exception, response committed. : " + errorResponse);
