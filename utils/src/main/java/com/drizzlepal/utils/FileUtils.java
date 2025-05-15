@@ -1,6 +1,9 @@
 package com.drizzlepal.utils;
 
+import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
+import java.net.URL;
 import java.nio.channels.Channels;
 import java.nio.channels.SeekableByteChannel;
 import java.nio.file.Files;
@@ -53,6 +56,33 @@ public class FileUtils {
         } catch (Exception e) {
             // 打印异常信息，便于调试和日志记录
             e.printStackTrace();
+        }
+    }
+
+    /**
+     * 获取类路径下的文件没有则创建文件
+     *
+     * @param fileName 文件名
+     * @return 文件
+     * @throws IOException
+     */
+    public static File getClassPathFile(String fileName) throws IOException {
+        URL resource = FileUtils.class.getClassLoader().getResource(".");
+        File file = new File(resource.getPath(), fileName);
+        if (!file.exists()) {
+            file.createNewFile();
+        }
+        return file;
+    }
+
+    /**
+     * 删除文件
+     * 
+     * @param file 要删除的文件
+     */
+    public static void deleteFile(File file) {
+        if (file.exists()) {
+            file.delete();
         }
     }
 

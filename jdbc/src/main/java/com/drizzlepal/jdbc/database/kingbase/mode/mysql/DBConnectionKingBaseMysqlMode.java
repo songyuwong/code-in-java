@@ -1,4 +1,4 @@
-package com.drizzlepal.jdbc.kingbase.mode.mysql;
+package com.drizzlepal.jdbc.database.kingbase.mode.mysql;
 
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
