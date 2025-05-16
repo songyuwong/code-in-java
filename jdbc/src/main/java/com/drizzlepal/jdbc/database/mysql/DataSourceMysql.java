@@ -1,12 +1,12 @@
 package com.drizzlepal.jdbc.database.mysql;
 
 import com.drizzlepal.jdbc.DatabaseConfigCommon;
-import com.drizzlepal.jdbc.DatasourceCommon;
+import com.drizzlepal.jdbc.DataSourceCommon;
 import com.drizzlepal.utils.StringUtils;
 
-public class DatasourceMysql extends DatasourceCommon {
+public class DataSourceMysql extends DataSourceCommon {
 
-    public DatasourceMysql(DatabaseConfigCommon configCommon) {
+    public DataSourceMysql(DatabaseConfigCommon configCommon) {
         super(configCommon);
     }
 

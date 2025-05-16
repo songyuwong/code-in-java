@@ -3,6 +3,7 @@ package com.drizzlepal.jdbc;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -11,19 +12,21 @@ import java.util.List;
 import java.util.function.Consumer;
 
 import com.drizzlepal.jdbc.exception.UnknowDatabaseException;
+import com.drizzlepal.jdbc.metadata.ColumnInfoLabels;
 import com.drizzlepal.jdbc.metadata.ColumnMetaData;
 import com.drizzlepal.jdbc.metadata.DatabaseMetaData;
+import com.drizzlepal.jdbc.metadata.IndexMetaData;
 import com.drizzlepal.jdbc.metadata.TableMetaData;
 import com.drizzlepal.utils.StringUtils;
 import com.zaxxer.hikari.HikariDataSource;
 
-public abstract class DatasourceCommon implements Datasource {
+public abstract class DataSourceCommon implements DataSource {
 
     protected final HikariDataSource dataSource;
 
     protected final DatabaseConfigCommon configCommon;
 
-    public DatasourceCommon(DatabaseConfigCommon configCommon) {
+    public DataSourceCommon(DatabaseConfigCommon configCommon) {
         this.configCommon = configCommon;
         this.dataSource = new HikariDataSource();
         this.dataSource.setJdbcUrl(buildJdbcUrl(configCommon));
@@ -54,8 +57,6 @@ public abstract class DatasourceCommon implements Datasource {
     }
 
     public abstract String buildJdbcUrl(DatabaseConfigCommon configCommon);
-
-    protected abstract boolean checkDatabaseNameConfigExists();
 
     @Override
     public List<String> getDatabaseNames() throws UnknowDatabaseException, SQLException {
@@ -96,12 +97,20 @@ public abstract class DatasourceCommon implements Datasource {
     }
 
     @Override
+    public List<IndexMetaData> getIndexMetaData(String tableName, boolean unique)
+            throws UnknowDatabaseException, SQLException {
+        if (!checkDatabaseNameConfigExists()) {
+            throw new UnknowDatabaseException("连接信息中未指定获取哪个数据库");
+        }
+        return getIndexMetaData(configCommon.getSchema(), configCommon.getDatabase(), tableName, unique);
+    }
+
+    @Override
     public DatabaseMetaData getMetaData(String schema, String databaseName) throws SQLException {
         DatabaseMetaData databaseMetaData = new DatabaseMetaData();
         databaseMetaData.setName(databaseName);
         databaseMetaData.setSchema(schema);
         LinkedList<TableMetaData> tableMetaDataList = new LinkedList<>();
-        databaseMetaData.setTables(null);
         try (Connection connection = getConnection();) {
             if (StringUtils.isNotBlank(configCommon.getDatabaseType().getDatabaseMetaDataQuerySql())) {
                 try (PreparedStatement statement = connection
@@ -196,14 +205,142 @@ public abstract class DatasourceCommon implements Datasource {
         return null;
     }
 
+    @Override
+    public List<IndexMetaData> getIndexMetaData(String schema, String databaseName, String tableName, boolean unique)
+            throws SQLException {
+        LinkedList<IndexMetaData> indexes = new LinkedList<>();
+        try (Connection connection = getConnection();) {
+            if (StringUtils.isNotBlank(configCommon.getDatabaseType().getDatabaseMetaDataQuerySql())) {
+
+            } else {
+                java.sql.DatabaseMetaData metaData = connection.getMetaData();
+                HashMap<IndexMetaData, LinkedList<ColumnMetaData>> indexColumnMetaDataMap = new HashMap<>();
+                try (ResultSet indexInfo = metaData.getIndexInfo(databaseName, schema, tableName, unique, false);) {
+                    while (indexInfo.next()) {
+                        IndexMetaData indexMetaData = new IndexMetaData();
+                        indexMetaData.setName(indexInfo.getString("INDEX_NAME"));
+                        indexMetaData.setType(indexInfo.getString("TYPE"));
+                        indexMetaData.setUnique(!indexInfo.getBoolean("NON_UNIQUE"));
+                        ColumnMetaData columnMetaData = new ColumnMetaData();
+                        columnMetaData.setName(indexInfo.getString("COLUMN_NAME"));
+                        columnMetaData.setOrdinalPosition(indexInfo.getInt("ORDINAL_POSITION"));
+                        if (!indexColumnMetaDataMap.containsKey(indexMetaData)) {
+                            indexColumnMetaDataMap.put(indexMetaData, new LinkedList<>());
+                        }
+                        indexColumnMetaDataMap.get(indexMetaData).addLast(columnMetaData);
+                    }
+                    indexColumnMetaDataMap.forEach((indexMetaData, columnMetaDataList) -> {
+                        indexMetaData.setColumns(new ArrayList<>(columnMetaDataList));
+                        indexes.add(indexMetaData);
+                    });
+                }
+            }
+        }
+        return indexes;
+    }
+
+    @Override
+    public List<String> getDefaultColumnsResultSetMetaDataColumnLabels(String tableName)
+            throws UnknowDatabaseException, SQLException {
+        if (!checkDatabaseNameConfigExists()) {
+            throw new UnknowDatabaseException("连接信息中未指定获取哪个数据库");
+        }
+        return getDefaultColumnsResultSetMetaDataColumnLabels(configCommon.getSchema(), configCommon.getDatabase(),
+                tableName);
+    }
+
+    @Override
+    public List<String> getDefaultColumnsResultSetMetaDataColumnLabels(String schema, String databaseName,
+            String tableName) throws SQLException {
+        try (Connection connection = getConnection();
+                ResultSet resultSet = connection.getMetaData().getColumns(databaseName, schema, tableName, "%");) {
+            return getResultSetMetaDataColumnLabels(resultSet);
+        }
+    }
+
+    @Override
+    public List<String> getDefaultIndexesResultSetMetaDataColumnLabels(String tableName)
+            throws UnknowDatabaseException, SQLException {
+        if (!checkDatabaseNameConfigExists()) {
+            throw new UnknowDatabaseException("连接信息中未指定获取哪个数据库");
+        }
+        return getDefaultIndexesResultSetMetaDataColumnLabels(configCommon.getSchema(), configCommon.getDatabase(),
+                tableName);
+    }
+
+    @Override
+    public List<String> getDefaultIndexesResultSetMetaDataColumnLabels(String schema, String databaseName,
+            String tableName) throws SQLException {
+        try (Connection connection = getConnection();
+                ResultSet indexInfo = connection.getMetaData().getIndexInfo(databaseName, schema, tableName, false,
+                        false);) {
+            return getResultSetMetaDataColumnLabels(indexInfo);
+        }
+    }
+
+    @Override
+    public List<String> getDefaultTableResultSetMetaDataColumnLabels(String tableName)
+            throws UnknowDatabaseException, SQLException {
+        if (!checkDatabaseNameConfigExists()) {
+            throw new UnknowDatabaseException("连接信息中未指定获取哪个数据库");
+        }
+        return getDefaultTableResultSetMetaDataColumnLabels(configCommon.getSchema(), configCommon.getDatabase(),
+                tableName);
+    }
+
+    @Override
+    public List<String> getDefaultTableResultSetMetaDataColumnLabels(String schema, String databaseName,
+            String tableName) throws SQLException {
+        try (Connection connection = getConnection();
+                ResultSet tables = connection.getMetaData().getTables(databaseName, schema, tableName,
+                        configCommon.getDatabaseType().getDatabaseTableTypes());) {
+            return getResultSetMetaDataColumnLabels(tables);
+        }
+    }
+
+    @Override
+    public List<String> getResultSetMetaDataColumnLabels(ResultSet resultSet) throws SQLException {
+        LinkedList<String> res = new LinkedList<>();
+        ResultSetMetaData metaData = resultSet.getMetaData();
+        for (int i = 1; i <= metaData.getColumnCount(); i++) {
+            res.add(metaData.getColumnLabel(i));
+        }
+        return res;
+    }
+
+    @Override
+    public List<String> getTableNames(String databaseName) throws UnknowDatabaseException, SQLException {
+        LinkedList<String> res = new LinkedList<>();
+        Connection connection = getConnection();
+        try {
+            connection.setAutoCommit(false);
+            connection.prepareStatement("use " + databaseName).execute();
+            try (ResultSet executeQuery = connection.prepareStatement("show tables").executeQuery();) {
+                while (executeQuery.next()) {
+                    res.add(executeQuery.getString(1));
+                }
+            }
+        } finally {
+            if (connection != null) {
+                connection.close();
+                connection.commit();
+            }
+        }
+        return res;
+    }
+
+    protected abstract boolean checkDatabaseNameConfigExists();
+
     protected ColumnMetaData readColumnMetaDataFromResultSet(ResultSet columns) throws SQLException {
         ColumnMetaData columnMetaData = new ColumnMetaData();
-        columnMetaData.setName(columns.getString("COLUMN_NAME"));
-        columnMetaData.setRemarks(columns.getString("REMARKS"));
-        columnMetaData.setTypeName(columns.getString("TYPE_NAME"));
-        columnMetaData.setLength(columns.getInt("COLUMN_SIZE"));
-        columnMetaData.setDatatype(columns.getInt("DATA_TYPE"));
-        columnMetaData.setOrdinalPosition(columns.getInt("ORDINAL_POSITION"));
+        columnMetaData.setName(columns.getString(ColumnInfoLabels.COLUMN_NAME));
+        columnMetaData.setRemarks(columns.getString(ColumnInfoLabels.REMARKS));
+        columnMetaData.setTypeName(columns.getString(ColumnInfoLabels.TYPE_NAME));
+        columnMetaData.setLength(columns.getInt(ColumnInfoLabels.COLUMN_SIZE));
+        columnMetaData.setDatatype(columns.getInt(ColumnInfoLabels.DATA_TYPE));
+        columnMetaData.setOrdinalPosition(columns.getInt(ColumnInfoLabels.ORDINAL_POSITION));
+        columnMetaData.setNullable(columns.getInt(ColumnInfoLabels.NULLABLE));
+        columnMetaData.setDecimalDigits(columns.getInt(ColumnInfoLabels.DECIMAL_DIGITS));
         return columnMetaData;
     }
 

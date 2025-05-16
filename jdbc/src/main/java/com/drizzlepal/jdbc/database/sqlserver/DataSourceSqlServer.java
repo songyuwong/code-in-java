@@ -1,11 +1,11 @@
 package com.drizzlepal.jdbc.database.sqlserver;
 
 import com.drizzlepal.jdbc.DatabaseConfigCommon;
-import com.drizzlepal.jdbc.DatasourceCommon;
+import com.drizzlepal.jdbc.DataSourceCommon;
 
-public class DatasourceSqlServer extends DatasourceCommon {
+public class DataSourceSqlServer extends DataSourceCommon {
 
-    public DatasourceSqlServer(DatabaseConfigCommon configCommon) {
+    public DataSourceSqlServer(DatabaseConfigCommon configCommon) {
         super(configCommon);
     }
 

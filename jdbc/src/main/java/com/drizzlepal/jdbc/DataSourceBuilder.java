@@ -2,69 +2,69 @@ package com.drizzlepal.jdbc;
 
 import com.drizzlepal.jdbc.exception.JdbcException;
 
-public class DatasourceBuilder {
+public class DataSourceBuilder {
 
     private final DatabaseConfigCommon databaseConfig;
 
-    private DatasourceBuilder(DatabaseType databaseType) {
+    private DataSourceBuilder(DatabaseType databaseType) {
         databaseConfig = databaseType.initDataConfig();
     }
 
-    public static DatasourceBuilder builder(DatabaseType databaseType) {
-        return new DatasourceBuilder(databaseType);
+    public static DataSourceBuilder builder(DatabaseType databaseType) {
+        return new DataSourceBuilder(databaseType);
     }
 
-    public DatasourceBuilder userName(String userName) {
+    public DataSourceBuilder userName(String userName) {
         databaseConfig.setUsername(userName);
         return this;
     }
 
-    public DatasourceBuilder password(String password) {
+    public DataSourceBuilder password(String password) {
         databaseConfig.setPassword(password);
         return this;
     }
 
-    public DatasourceBuilder host(String host) {
+    public DataSourceBuilder host(String host) {
         databaseConfig.setHost(host);
         return this;
     }
 
-    public DatasourceBuilder port(int port) {
+    public DataSourceBuilder port(int port) {
         databaseConfig.setPort(port);
         return this;
     }
 
-    public DatasourceBuilder database(String database) {
+    public DataSourceBuilder database(String database) {
         databaseConfig.setDatabase(database);
         return this;
     }
 
-    public DatasourceBuilder schema(String schema) {
+    public DataSourceBuilder schema(String schema) {
         databaseConfig.setSchema(schema);
         return this;
     }
 
-    public DatasourceBuilder connectionParam(String key, String value) {
+    public DataSourceBuilder connectionParam(String key, String value) {
         databaseConfig.getConnectionParams().put(key, value);
         return this;
     }
 
-    public DatasourceBuilder maxActive(int maxActive) {
+    public DataSourceBuilder maxActive(int maxActive) {
         databaseConfig.setMaxActive(maxActive);
         return this;
     }
 
-    public DatasourceBuilder maxWaitMs(long maxWaitMs) {
+    public DataSourceBuilder maxWaitMs(long maxWaitMs) {
         databaseConfig.setMaxWaitMs(maxWaitMs);
         return this;
     }
 
-    public DatasourceBuilder minIdle(int minIdle) {
+    public DataSourceBuilder minIdle(int minIdle) {
         databaseConfig.setMinIdle(minIdle);
         return this;
     }
 
-    public Datasource build() throws JdbcException {
+    public DataSource build() throws JdbcException {
         databaseConfig.isValid();
         return databaseConfig.getDatabaseType().initDataSource(databaseConfig);
     }
