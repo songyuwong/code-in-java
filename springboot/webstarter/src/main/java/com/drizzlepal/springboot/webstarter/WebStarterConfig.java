@@ -1,6 +1,7 @@
 package com.drizzlepal.springboot.webstarter;
 
 import java.nio.charset.StandardCharsets;
+import java.util.Collections;
 import java.util.List;
 
 import org.springframework.beans.BeansException;
@@ -50,7 +51,7 @@ public class WebStarterConfig implements WebMvcConfigurer, ApplicationContextAwa
         config.setWriterFilters(new NullFilter());
         converter.setFastJsonConfig(config);
         converter.setDefaultCharset(StandardCharsets.UTF_8);
-        converter.setSupportedMediaTypes(List.of(MediaType.APPLICATION_JSON));
+        converter.setSupportedMediaTypes(Collections.singletonList(MediaType.APPLICATION_JSON));
         // 将自定义的转换器添加到列表中
         converters.add(0, converter);
     }

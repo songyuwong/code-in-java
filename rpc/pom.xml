@@ -4,12 +4,12 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>com.drizzlepal</groupId>
-        <artifactId>parent</artifactId>
+        <artifactId>parent8</artifactId>
         <version>1.0.0</version>
     </parent>
 
     <groupId>com.drizzlepal</groupId>
-    <artifactId>rpc</artifactId>
+    <artifactId>rpc8</artifactId>
     <name>drizzlepal rpc</name>
     <description>drizzlepal RPC 远程过程调用规范模块</description>
 

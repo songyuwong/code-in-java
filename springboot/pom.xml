@@ -4,12 +4,12 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>com.drizzlepal</groupId>
-        <artifactId>parent</artifactId>
+        <artifactId>parent8</artifactId>
         <version>1.0.0</version>
     </parent>
 
     <groupId>com.drizzlepal</groupId>
-    <artifactId>springboot</artifactId>
+    <artifactId>springboot8</artifactId>
     <packaging>pom</packaging>
     <name>drizzlepal springboot</name>
     <description>drizzlepal springboot 相关实现</description>

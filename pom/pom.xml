@@ -6,12 +6,12 @@
 
     <parent>
         <groupId>com.drizzlepal</groupId>
-        <artifactId>parent</artifactId>
+        <artifactId>parent8</artifactId>
         <version>1.0.0</version>
     </parent>
 
     <groupId>com.drizzlepal</groupId>
-    <artifactId>pom</artifactId>
+    <artifactId>pom8</artifactId>
     <packaging>pom</packaging>
     <name>drizzlepal pom</name>
     <description>drizzlepal 依赖管理，用于给使用方提供 drizzlepal 子模块版本控制</description>
@@ -20,32 +20,32 @@
         <dependencies>
             <dependency>
                 <groupId>com.drizzlepal.springboot</groupId>
-                <artifactId>webstarter</artifactId>
+                <artifactId>webstarter8</artifactId>
                 <version>${revision}</version>
             </dependency>
             <dependency>
                 <groupId>com.drizzlepal</groupId>
-                <artifactId>utils</artifactId>
+                <artifactId>utils8</artifactId>
                 <version>${revision}</version>
             </dependency>
             <dependency>
                 <groupId>com.drizzlepal.springboot</groupId>
-                <artifactId>miniostarter</artifactId>
+                <artifactId>miniostarter8</artifactId>
                 <version>${revision}</version>
             </dependency>
             <dependency>
                 <groupId>com.drizzlepal</groupId>
-                <artifactId>jdbc</artifactId>
+                <artifactId>jdbc8</artifactId>
                 <version>${revision}</version>
             </dependency>
             <dependency>
                 <groupId>com.drizzlepal</groupId>
-                <artifactId>token</artifactId>
+                <artifactId>token8</artifactId>
                 <version>${revision}</version>
             </dependency>
             <dependency>
                 <groupId>com.drizzlepal</groupId>
-                <artifactId>utils</artifactId>
+                <artifactId>utils8</artifactId>
                 <version>${revision}</version>
             </dependency>
         </dependencies>

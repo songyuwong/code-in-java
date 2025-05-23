@@ -4,12 +4,12 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>com.drizzlepal</groupId>
-        <artifactId>springboot</artifactId>
+        <artifactId>springboot8</artifactId>
         <version>1.0.0</version>
     </parent>
 
     <groupId>com.drizzlepal.springboot</groupId>
-    <artifactId>webstarter</artifactId>
+    <artifactId>webstarter8</artifactId>
     <name>drizzlepal springboot web starter</name>
     <description>drizzlepal springboot web starter 封装</description>
 
@@ -20,7 +20,7 @@
         </dependency>
         <dependency>
             <groupId>com.drizzlepal</groupId>
-            <artifactId>rpc</artifactId>
+            <artifactId>rpc8</artifactId>
             <version>${revision}</version>
         </dependency>
     </dependencies>
