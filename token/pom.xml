@@ -14,9 +14,4 @@
     <name>token</name>
     <description>drizzlepal token 工具抽象封装</description>
 
-    <properties>
-        <maven.compiler.source>17</maven.compiler.source>
-        <maven.compiler.target>17</maven.compiler.target>
-    </properties>
-
 </project>

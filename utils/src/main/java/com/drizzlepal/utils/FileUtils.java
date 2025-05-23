@@ -62,13 +62,13 @@ public class FileUtils {
     /**
      * 获取类路径下的文件没有则创建文件
      *
-     * @param fileName 文件名
+     * @param paths 多级目录
      * @return 文件
      * @throws IOException
      */
-    public static File getClassPathFile(String fileName) throws IOException {
+    public static File getClassPathFile(String... paths) throws IOException {
         URL resource = FileUtils.class.getClassLoader().getResource(".");
-        File file = new File(resource.getPath(), fileName);
+        File file = Paths.get(resource.getPath(), paths).toFile();
         if (!file.exists()) {
             file.createNewFile();
         }
