@@ -19,6 +19,7 @@
         <module>utils</module>
         <module>jdbc</module>
         <module>token</module>
+        <module>auth</module>
     </modules>
 
     <properties>
