@@ -9,8 +9,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.function.Consumer;
 
+import com.drizzlepal.jdbc.exception.ConnectionOperationException;
 import com.drizzlepal.jdbc.exception.UnknowDatabaseException;
 import com.drizzlepal.jdbc.metadata.ColumnInfoLabels;
 import com.drizzlepal.jdbc.metadata.ColumnMetaData;
@@ -18,6 +18,7 @@ import com.drizzlepal.jdbc.metadata.DatabaseMetaData;
 import com.drizzlepal.jdbc.metadata.IndexMetaData;
 import com.drizzlepal.jdbc.metadata.TableMetaData;
 import com.drizzlepal.utils.StringUtils;
+import com.drizzlepal.utils.functions.ConsumerThrowable;
 import com.zaxxer.hikari.HikariDataSource;
 
 public abstract class DataSourceCommon implements DataSource {
@@ -50,9 +51,11 @@ public abstract class DataSourceCommon implements DataSource {
     }
 
     @Override
-    public void doWithConnection(Consumer<Connection> thingsToDo) throws Exception {
+    public void doWithConnection(ConsumerThrowable<Connection> thingsToDo) throws ConnectionOperationException {
         try (Connection connection = this.getConnection()) {
             thingsToDo.accept(connection);
+        } catch (Throwable e) {
+            throw new ConnectionOperationException(e);
         }
     }
 
