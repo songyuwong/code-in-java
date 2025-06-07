@@ -20,9 +20,9 @@ public class ObjectOpTest {
 
     @Test
     public void testPutObject() throws Exception {
-        FileUtils.fileInputStreamHandler("/home/songyu/Desktop/clickhouse-jdbc-0.3.2-patch10-all.jar", sc -> {
+        FileUtils.resourcesFileInputStreamConsumer(sc -> {
             minioTemplate.putObject("test", "test", sc);
-        });
+        }, "/home/songyu/Desktop/clickhouse-jdbc-0.3.2-patch10-all.jar");
     }
 
     @Test
