@@ -1,6 +1,7 @@
 package com.drizzlepal.rpc.exception;
 
-import org.springframework.http.HttpStatus;
+import com.drizzlepal.rpc.RpcException;
+import com.drizzlepal.rpc.RpcStatusCommon;
 
 /**
  * 权限不足异常
@@ -20,8 +21,8 @@ public class PermissionDeniedException extends RpcException {
     }
 
     @Override
-    public HttpStatus httpStatus() {
-        return HttpStatus.FORBIDDEN;
+    public RpcStatusCommon getRpcStatus() {
+        return RpcStatusCommon.PERMISSION_DENIED;
     }
 
 }

@@ -1,6 +1,7 @@
 package com.drizzlepal.rpc.exception;
 
-import org.springframework.http.HttpStatus;
+import com.drizzlepal.rpc.RpcException;
+import com.drizzlepal.rpc.RpcStatusCommon;
 
 /**
  * 请求参数错误异常
@@ -20,8 +21,8 @@ public class InvaildParamException extends RpcException {
     }
 
     @Override
-    public HttpStatus httpStatus() {
-        return HttpStatus.BAD_REQUEST;
+    public RpcStatusCommon getRpcStatus() {
+        return RpcStatusCommon.PARAM_INVALID;
     }
 
 }

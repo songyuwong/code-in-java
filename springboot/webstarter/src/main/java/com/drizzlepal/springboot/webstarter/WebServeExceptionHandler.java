@@ -7,8 +7,9 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.drizzlepal.rpc.exception.RpcException;
-import com.drizzlepal.rpc.response.RpcResponse;
+import com.drizzlepal.rpc.RpcException;
+import com.drizzlepal.rpc.RpcResponse;
+import com.drizzlepal.rpc.RpcStatusCommon;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -31,7 +32,7 @@ public class WebServeExceptionHandler {
     @ExceptionHandler(RpcException.class)
     public ResponseEntity<RpcResponse> handleWebServeException(RpcException ex) {
         log.error("捕获到异常", ex);
-        return ResponseEntity.status(ex.httpStatus()).body(RpcResponse.failed(ex));
+        return ResponseEntity.status(500).body(RpcResponse.failed(ex));
     }
 
     /**
@@ -46,7 +47,7 @@ public class WebServeExceptionHandler {
     public ResponseEntity<RpcResponse> handleException(Throwable cause) {
         log.error("未处理的异常", cause);
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body(RpcResponse.failed(cause));
+                .body(RpcResponse.failed(RpcStatusCommon.UNKNOWN_ERROR, cause));
     }
 
 }

@@ -2,14 +2,14 @@ package com.drizzlepal.springboot.miniostarter;
 
 import java.io.InputStream;
 
+import javax.annotation.Resource;
+
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ContextConfiguration;
 
 import com.drizzlepal.springboot.miniostarter.exception.DrizzlepalMinioObjectOpException;
 import com.drizzlepal.utils.FileUtils;
-
-import jakarta.annotation.Resource;
 
 @SpringBootTest
 @ContextConfiguration(classes = MinioStarterConfig.class)

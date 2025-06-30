@@ -43,11 +43,6 @@
                 <artifactId>token8</artifactId>
                 <version>${revision}</version>
             </dependency>
-            <dependency>
-                <groupId>com.drizzlepal</groupId>
-                <artifactId>utils8</artifactId>
-                <version>${revision}</version>
-            </dependency>
         </dependencies>
     </dependencyManagement>
 

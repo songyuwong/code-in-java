@@ -1,6 +1,7 @@
 package com.drizzlepal.rpc.exception;
 
-import org.springframework.http.HttpStatus;
+import com.drizzlepal.rpc.RpcException;
+import com.drizzlepal.rpc.RpcStatusCommon;
 
 /**
  * 服务异常
@@ -20,8 +21,8 @@ public class ServiceException extends RpcException {
     }
 
     @Override
-    public HttpStatus httpStatus() {
-        return HttpStatus.INTERNAL_SERVER_ERROR;
+    public RpcStatusCommon getRpcStatus() {
+        return RpcStatusCommon.SERVICE_UNAVAILABLE;
     }
 
 }

@@ -214,4 +214,14 @@ public class FileUtils {
         }
     }
 
+    /**
+     * 将文件名中可能为路径符号的字符去除
+     * 
+     * @param fileNamePathWith 可能有路径分隔符号的文件名
+     * @return 去除后的结果
+     */
+    public static String makeValidFileName(String fileNamePathWith) {
+        return fileNamePathWith.replaceAll(File.separator, "");
+    }
+
 }
