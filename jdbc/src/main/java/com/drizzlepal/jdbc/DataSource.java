@@ -21,12 +21,7 @@ import com.drizzlepal.utils.functions.ConsumerThrowable;
  * Datasource接口定义了与数据源进行交互的方法
  * 它提供了获取数据库连接、获取数据库元数据、表元数据、列元数据和索引元数据等功能
  */
-public interface DataSource {
-
-	/**
-	 * 关闭数据源连接
-	 */
-	void close();
+public interface DataSource extends AutoCloseable {
 
 	/**
 	 * 获取数据库连接

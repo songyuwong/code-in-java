@@ -41,7 +41,7 @@ public abstract class DataSourceCommon implements DataSource {
     }
 
     @Override
-    public void close() {
+    public void close() throws Exception {
         dataSource.close();
     }
 
