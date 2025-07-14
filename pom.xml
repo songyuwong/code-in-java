@@ -19,6 +19,7 @@
         <module>crawler</module>
         <module>jdbc</module>
         <module>rpc</module>
+        <module>crypto</module>
     </modules>
 
     <properties>
@@ -143,6 +144,16 @@
                 <groupId>org.pf4j</groupId>
                 <artifactId>pf4j</artifactId>
                 <version>3.13.0</version>
+            </dependency>
+            <dependency>
+                <groupId>org.bouncycastle</groupId>
+                <artifactId>bcprov-jdk15on</artifactId>
+                <version>1.70</version>
+            </dependency>
+            <dependency>
+                <groupId>org.bouncycastle</groupId>
+                <artifactId>bcpkix-jdk15on</artifactId>
+                <version>1.70</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
