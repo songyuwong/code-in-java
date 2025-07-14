@@ -1,9 +1,6 @@
 package com.drizzlepal.crypto.asymmetric.algorithm;
 
-import java.io.IOException;
 import java.security.Key;
-import java.security.PrivateKey;
-import java.security.PublicKey;
 
 import javax.crypto.Cipher;
 
@@ -79,23 +76,6 @@ public class ECCAlgorithm extends AsymmetricAlgorithm {
         } catch (Exception e) {
             throw new CryptoErrorException(e);
         }
-    }
-
-    /**
-     * 密钥协商（Key Agreement）接口，目前未实现。
-     *
-     * @param initiator  是否为协商发起者
-     * @param privateKey 本方私钥
-     * @param publicKey  对方公钥
-     * @param keyLen     协商密钥长度（单位：字节）
-     * @return 协商出的共享密钥
-     * @throws IOException 当前方法未实现
-     */
-    @Override
-    public byte[] agreement(boolean initiator, PrivateKey privateKey, PublicKey publicKey, int keyLen)
-            throws IOException {
-        // 椭圆曲线密钥协商尚未实现
-        throw new UnsupportedOperationException("Unimplemented method 'agreement'");
     }
 
 }

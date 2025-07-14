@@ -1,11 +1,8 @@
 package com.drizzlepal.crypto.asymmetric.algorithm;
 
-import java.io.IOException;
 import java.security.InvalidKeyException;
 import java.security.Key;
 import java.security.NoSuchAlgorithmException;
-import java.security.PrivateKey;
-import java.security.PublicKey;
 import java.security.spec.RSAKeyGenParameterSpec;
 import java.util.StringJoiner;
 
@@ -142,17 +139,6 @@ public class RSAAlgorithm extends AsymmetricAlgorithm {
             // 单块数据直接解密
             return cryptoBlock(BytesConvertUtils.hexStringToBytes(dataStr), key, Cipher.DECRYPT_MODE);
         }
-    }
-
-    /**
-     * RSA 不支持密钥协商，此方法未实现。
-     *
-     * @throws UnsupportedOperationException 调用将抛出异常
-     */
-    @Override
-    public byte[] agreement(boolean initiator, PrivateKey privateKey, PublicKey publicKey, int keyLen)
-            throws IOException {
-        throw new UnsupportedOperationException("Unimplemented method 'agreement'");
     }
 
 }

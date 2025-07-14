@@ -16,7 +16,6 @@ import org.bouncycastle.openssl.PEMParser;
 import org.bouncycastle.util.io.pem.PemObject;
 import org.bouncycastle.util.io.pem.PemWriter;
 
-import com.drizzlepal.crypto.BytesConvertUtils;
 import com.drizzlepal.crypto.exception.InvalidKeyAlgorithmException;
 
 import java.io.IOException;
@@ -164,41 +163,6 @@ public class KeyPairFactory {
     public static final PrivateKey importPrivateKeyPem(String privateKeyPem, AsymmetricAlgorithms algEnum)
             throws InvalidKeyAlgorithmException {
         return importPrivateKeyPem(privateKeyPem, algEnum.algorithm);
-    }
-
-    /**
-     * 根据指定的密钥生成协议密钥
-     * 
-     * @param initiator  表示是否为发起方的布尔值
-     * @param privateKey 用于生成协议密钥的私钥
-     * @param publicKey  用于生成协议密钥的公钥
-     * @param size       生成协议密钥的大小
-     * @param algorithm  使用的非对称算法
-     * @return 返回生成的协议密钥的ASCII字符串表示形式
-     * @throws IOException 如果算法操作失败，可能会抛出此异常
-     */
-    public static final String agreementKey(boolean initiator, PrivateKey privateKey, PublicKey publicKey, int size,
-            AsymmetricAlgorithm algorithm) throws IOException {
-        return BytesConvertUtils.bytesToASCIIString(algorithm.agreement(initiator, privateKey, publicKey, size));
-    }
-
-    /**
-     * 根据指定的密钥对和算法生成协商密钥
-     * 
-     * @param initiator     表示是否为发起方
-     * @param privateKey    私钥
-     * @param publicKey     公钥
-     * @param size          生成协议密钥的大小
-     * @param algorithmEnum 不对称算法枚举类型
-     * @return 返回生成的协商密钥
-     * @throws IOException 如果生成过程中发生错误，则抛出此异常
-     * 
-     *                     此方法为上述参数提供了一种生成协商密钥的方式，
-     *                     具体实现细节由所选的算法决定。
-     */
-    public static final String agreementKey(boolean initiator, PrivateKey privateKey, PublicKey publicKey, int size,
-            AsymmetricAlgorithms algorithmEnum) throws IOException {
-        return agreementKey(initiator, privateKey, publicKey, size, algorithmEnum.algorithm);
     }
 
 }

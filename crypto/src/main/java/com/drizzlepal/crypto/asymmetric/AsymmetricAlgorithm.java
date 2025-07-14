@@ -1,10 +1,7 @@
 
 package com.drizzlepal.crypto.asymmetric;
 
-import java.io.IOException;
 import java.security.Key;
-import java.security.PrivateKey;
-import java.security.PublicKey;
 import java.security.Security;
 import java.security.spec.AlgorithmParameterSpec;
 
@@ -61,17 +58,4 @@ public abstract class AsymmetricAlgorithm {
      */
     public abstract byte[] decryptBytes(byte[] data, Key key) throws CryptoErrorException;
 
-    /**
-     * 实现密钥协议功能
-     * 该方法用于执行密钥协议过程，根据提供的私钥和公钥计算共享密钥
-     *
-     * @param initiator  标识是否为发起者
-     * @param privateKey 私钥，用于密钥协议
-     * @param publicKey  公钥，用于密钥协议
-     * @param keyLen     生成共享密钥的长度
-     * @return 返回通过密钥协议生成的共享密钥
-     * @throws IOException 如果在协议过程中发生I/O异常
-     */
-    public abstract byte[] agreement(boolean initiator, PrivateKey privateKey, PublicKey publicKey, int keyLen)
-            throws IOException;
 }
