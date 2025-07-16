@@ -18,5 +18,6 @@ public enum SymmetricCryptoMode {
     CBC,
     CFB,
     OFB,
-    CTR
+    CTR,
+    GCM
 }

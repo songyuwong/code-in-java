@@ -52,10 +52,12 @@ public class SymmetricCrypto {
      * @param data          待加密的数据
      * @param key           加密密钥
      * @param algorithmName 加密算法名称
+     * @param iv            初始向量
      * @return 加密后的数据
      * @throws CryptoErrorException 如果加密过程中发生错误或算法名称无效
      */
-    public static final byte[] encryptBytes(byte[] data, byte[] key, SymmetricCryptoAlgorithmName algorithmName)
+    public static final byte[] encryptBytes(byte[] data, byte[] key, SymmetricCryptoAlgorithmName algorithmName,
+            byte... iv)
             throws CryptoErrorException {
         // 根据算法名称获取对应的加密算法实例
         SymmetricAlgorithm algorithm = SymmetricAlgorithms.fromName(algorithmName);
@@ -66,7 +68,7 @@ public class SymmetricCrypto {
         // 检查密钥长度是否符合算法要求
         algorithm.checkKeySize(key);
         // 执行数据加密
-        return algorithm.encryptBytes(data, key);
+        return algorithm.encryptBytes(data, key, iv);
     }
 
     /**
@@ -75,10 +77,12 @@ public class SymmetricCrypto {
      * @param data          待解密的数据
      * @param key           解密密钥
      * @param algorithmName 解密算法名称
+     * @param iv            初始向量
      * @return 解密后的数据
      * @throws CryptoErrorException 如果解密过程中发生错误或算法名称无效
      */
-    public static final byte[] decryptBytes(byte[] data, byte[] key, SymmetricCryptoAlgorithmName algorithmName)
+    public static final byte[] decryptBytes(byte[] data, byte[] key, SymmetricCryptoAlgorithmName algorithmName,
+            byte... iv)
             throws CryptoErrorException {
         // 根据算法名称获取对应的解密算法实例
         SymmetricAlgorithm algorithm = SymmetricAlgorithms.fromName(algorithmName);
@@ -89,7 +93,7 @@ public class SymmetricCrypto {
         // 检查密钥长度是否符合算法要求
         algorithm.checkKeySize(key);
         // 执行数据解密
-        return algorithm.decryptBytes(data, key);
+        return algorithm.decryptBytes(data, key, iv);
     }
 
     /**
@@ -98,15 +102,16 @@ public class SymmetricCrypto {
      * @param data      待加密的数据
      * @param key       加密密钥
      * @param algorithm 加密算法实例
+     * @param iv        初始向量
      * @return 加密后的数据
      * @throws CryptoErrorException 如果加密过程中发生错误
      */
-    public static final byte[] encryptBytes(byte[] data, byte[] key, SymmetricAlgorithm algorithm)
+    public static final byte[] encryptBytes(byte[] data, byte[] key, SymmetricAlgorithm algorithm, byte... iv)
             throws CryptoErrorException {
         // 检查密钥长度是否符合算法要求
         algorithm.checkKeySize(key);
         // 执行数据加密
-        return algorithm.encryptBytes(data, key);
+        return algorithm.encryptBytes(data, key, iv);
     }
 
     /**
@@ -115,15 +120,16 @@ public class SymmetricCrypto {
      * @param data      待解密的数据
      * @param key       解密密钥
      * @param algorithm 解密算法实例
+     * @param iv        初始向量
      * @return 解密后的数据
      * @throws CryptoErrorException 如果解密过程中发生错误
      */
-    public static final byte[] decryptBytes(byte[] data, byte[] key, SymmetricAlgorithm algorithm)
+    public static final byte[] decryptBytes(byte[] data, byte[] key, SymmetricAlgorithm algorithm, byte... iv)
             throws CryptoErrorException {
         // 检查密钥长度是否符合算法要求
         algorithm.checkKeySize(key);
         // 执行数据解密
-        return algorithm.decryptBytes(data, key);
+        return algorithm.decryptBytes(data, key, iv);
     }
 
 }
