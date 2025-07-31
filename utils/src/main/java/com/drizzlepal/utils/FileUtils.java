@@ -224,4 +224,22 @@ public class FileUtils {
         return fileNamePathWith.replaceAll(File.separator, "");
     }
 
+    /**
+     * 获取指定类所在JAR包的目录
+     * 
+     * @param baseClass 基准类，用于定位其所在的JAR包
+     * @return JAR包所在的目录
+     * @throws FileNotFoundException 当无法获取JAR包路径时抛出此异常
+     */
+    public static File jarDir(Class<?> baseClass) throws FileNotFoundException {
+        try {
+            // 获取类所在位置的路径
+            String path = baseClass.getProtectionDomain().getCodeSource().getLocation().toURI().getPath();
+            File jarFile = new File(path);
+            return jarFile.getParentFile();
+        } catch (Exception e) {
+            throw new FileNotFoundException("无法获取 JAR 包路径", e);
+        }
+    }
+
 }
