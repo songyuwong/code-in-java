@@ -180,6 +180,34 @@ public abstract class DefaultDataSource implements DataSource {
     }
 
     @Override
+    public ArrayList<ColumnMetaData> getColumnMetaDataFormSql(String sql) throws SQLException {
+        LinkedList<ColumnMetaData> columnMetaDatas = new LinkedList<>();
+        try (Connection connection = getConnection(); PreparedStatement statement = connection.prepareStatement(sql);) {
+            ResultSetMetaData metaData = statement.getMetaData();
+            if (metaData == null) {
+                throw new SQLException("获取来源sql元数据信息失败");
+            }
+            for (int i = 1; i < metaData.getColumnCount() + 1; i++) {
+                ColumnMetaData columnMetaData = new ColumnMetaData();
+                columnMetaData.setDatatype(metaData.getColumnType(i));
+                columnMetaData.setDecimalDigits(metaData.getScale(i));
+                columnMetaData.setDefaultValue(null);
+                columnMetaData.setLength(metaData.getColumnDisplaySize(i));
+                columnMetaData.setName(metaData.getColumnName(i));
+                columnMetaData.setNullable(null);
+                columnMetaData.setOrdinalPosition(i);
+                columnMetaData.setRemarks(null);
+                columnMetaData.setTypeName(metaData.getColumnTypeName(i));
+                columnMetaDatas.addLast(columnMetaData);
+            }
+        }
+        ArrayList<ColumnMetaData> result = new ArrayList<>(columnMetaDatas.size());
+        columnMetaDatas.stream().sorted((a, b) -> a.getOrdinalPosition() - b.getOrdinalPosition())
+                .forEachOrdered(c -> result.add(c));
+        return result;
+    }
+
+    @Override
     public ColumnMetaData getColumnMetaData(String tableName, String columnName)
             throws UnknowDatabaseException, SQLException {
         if (!checkDatabaseNameConfigExists()) {

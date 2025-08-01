@@ -262,4 +262,6 @@ public interface DataSource extends AutoCloseable {
 	List<String> getDefaultTableResultSetMetaDataColumnLabels(String schema, String databaseName, String tableName)
 			throws SQLException;
 
+	ArrayList<ColumnMetaData> getColumnMetaDataFormSql(String sql) throws SQLException;
+
 }
