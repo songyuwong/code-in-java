@@ -6,9 +6,12 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import com.drizzlepal.jdbc.exception.ConnectionOperationException;
 import com.drizzlepal.jdbc.exception.UnknowDatabaseException;
@@ -16,18 +19,19 @@ import com.drizzlepal.jdbc.metadata.ColumnInfoLabels;
 import com.drizzlepal.jdbc.metadata.ColumnMetaData;
 import com.drizzlepal.jdbc.metadata.DatabaseMetaData;
 import com.drizzlepal.jdbc.metadata.IndexMetaData;
+import com.drizzlepal.jdbc.metadata.PrimaryKeyMetaData;
 import com.drizzlepal.jdbc.metadata.TableMetaData;
 import com.drizzlepal.utils.StringUtils;
 import com.drizzlepal.utils.functions.ConsumerThrowable;
 import com.zaxxer.hikari.HikariDataSource;
 
-public abstract class DataSourceCommon implements DataSource {
+public abstract class DefaultDataSource implements DataSource {
 
     protected final HikariDataSource dataSource;
 
-    protected final DatabaseConfigCommon configCommon;
+    protected final DefaultDatabaseConfig configCommon;
 
-    public DataSourceCommon(DatabaseConfigCommon configCommon) {
+    public DefaultDataSource(DefaultDatabaseConfig configCommon) {
         this.configCommon = configCommon;
         this.dataSource = new HikariDataSource();
         this.dataSource.setJdbcUrl(buildJdbcUrl(configCommon));
@@ -59,7 +63,7 @@ public abstract class DataSourceCommon implements DataSource {
         }
     }
 
-    public abstract String buildJdbcUrl(DatabaseConfigCommon configCommon);
+    public abstract String buildJdbcUrl(DefaultDatabaseConfig configCommon);
 
     @Override
     public List<String> getDatabaseNames() throws UnknowDatabaseException, SQLException {
@@ -80,32 +84,6 @@ public abstract class DataSourceCommon implements DataSource {
             throw new UnknowDatabaseException("连接信息中未指定获取哪个数据库");
         }
         return getMetaData(configCommon.getSchema(), configCommon.getDatabase());
-    }
-
-    @Override
-    public TableMetaData getTableMetaData(String tableName) throws UnknowDatabaseException, SQLException {
-        if (!checkDatabaseNameConfigExists()) {
-            throw new UnknowDatabaseException("连接信息中未指定获取哪个数据库");
-        }
-        return getTableMetaData(configCommon.getSchema(), configCommon.getDatabase(), tableName);
-    }
-
-    @Override
-    public ColumnMetaData getColumnMetaData(String tableName, String columnName)
-            throws UnknowDatabaseException, SQLException {
-        if (!checkDatabaseNameConfigExists()) {
-            throw new UnknowDatabaseException("连接信息中未指定获取哪个数据库");
-        }
-        return getColumnMetaData(configCommon.getSchema(), configCommon.getDatabase(), tableName, columnName);
-    }
-
-    @Override
-    public List<IndexMetaData> getIndexMetaData(String tableName, boolean unique)
-            throws UnknowDatabaseException, SQLException {
-        if (!checkDatabaseNameConfigExists()) {
-            throw new UnknowDatabaseException("连接信息中未指定获取哪个数据库");
-        }
-        return getIndexMetaData(configCommon.getSchema(), configCommon.getDatabase(), tableName, unique);
     }
 
     @Override
@@ -147,11 +125,18 @@ public abstract class DataSourceCommon implements DataSource {
                         configCommon.getDatabaseType().getDatabaseTableTypes());) {
                     while (tables.next()) {
                         TableMetaData tableMetaData = new TableMetaData();
+                        tableMetaData.setDatabase(databaseName);
                         tableMetaData.setName(tables.getString("TABLE_NAME"));
                         tableMetaData.setRemarks(tables.getString("REMARKS"));
                         if (tableColumnMap.containsKey(tableMetaData.getName())) {
-                            tableMetaData.setColumns(new ArrayList<>(tableColumnMap.remove(tableMetaData.getName())));
+                            LinkedList<ColumnMetaData> remove = tableColumnMap.remove(tableMetaData.getName());
+                            ArrayList<ColumnMetaData> columns = new ArrayList<ColumnMetaData>(remove.size());
+                            remove.stream().sorted((a, b) -> a.getOrdinalPosition() - b.getOrdinalPosition())
+                                    .forEachOrdered(c -> columns.add(c));
+                            tableMetaData.setColumns(columns);
                         }
+                        tableMetaData.setPrimaryKeys(getPrimaryKeys(schema, databaseName, databaseName));
+                        tableMetaData.setIndexes(getIndexMetaData(schema, databaseName, databaseName, false));
                         tableMetaDataList.addLast(tableMetaData);
                     }
                 }
@@ -159,6 +144,14 @@ public abstract class DataSourceCommon implements DataSource {
         }
         databaseMetaData.setTables(new ArrayList<>(tableMetaDataList));
         return databaseMetaData;
+    }
+
+    @Override
+    public TableMetaData getTableMetaData(String tableName) throws UnknowDatabaseException, SQLException {
+        if (!checkDatabaseNameConfigExists()) {
+            throw new UnknowDatabaseException("连接信息中未指定获取哪个数据库");
+        }
+        return getTableMetaData(configCommon.getSchema(), configCommon.getDatabase(), tableName);
     }
 
     @Override
@@ -172,22 +165,27 @@ public abstract class DataSourceCommon implements DataSource {
                         configCommon.getDatabaseType().getDatabaseTableTypes());) {
                     while (tables.next()) {
                         TableMetaData tableMetaData = new TableMetaData();
+                        tableMetaData.setDatabase(databaseName);
                         tableMetaData.setName(tables.getString("TABLE_NAME"));
                         tableMetaData.setRemarks(tables.getString("REMARKS"));
-                        try (ResultSet columns = metaData.getColumns(databaseName, schema, tableMetaData.getName(),
-                                "%");) {
-                            LinkedList<ColumnMetaData> columnMetaDataList = new LinkedList<>();
-                            while (columns.next()) {
-                                columnMetaDataList.addLast(readColumnMetaDataFromResultSet(columns));
-                            }
-                            tableMetaData.setColumns(new ArrayList<>(columnMetaDataList));
-                        }
+                        tableMetaData.setColumns(getColumnMetaData(schema, databaseName, tableName));
+                        tableMetaData.setIndexes(getIndexMetaData(schema, databaseName, tableName, false));
+                        tableMetaData.setPrimaryKeys(getPrimaryKeys(schema, databaseName, tableName));
                         return tableMetaData;
                     }
                 }
             }
         }
         return null;
+    }
+
+    @Override
+    public ColumnMetaData getColumnMetaData(String tableName, String columnName)
+            throws UnknowDatabaseException, SQLException {
+        if (!checkDatabaseNameConfigExists()) {
+            throw new UnknowDatabaseException("连接信息中未指定获取哪个数据库");
+        }
+        return getColumnMetaData(configCommon.getSchema(), configCommon.getDatabase(), tableName, columnName);
     }
 
     @Override
@@ -209,37 +207,120 @@ public abstract class DataSourceCommon implements DataSource {
     }
 
     @Override
-    public List<IndexMetaData> getIndexMetaData(String schema, String databaseName, String tableName, boolean unique)
+    public ArrayList<ColumnMetaData> getColumnMetaData(String tableName) throws UnknowDatabaseException, SQLException {
+        if (!checkDatabaseNameConfigExists()) {
+            throw new UnknowDatabaseException("连接信息中未指定获取哪个数据库");
+        }
+        return getColumnMetaData(configCommon.getSchema(), configCommon.getDatabase(), tableName);
+    }
+
+    @Override
+    public ArrayList<ColumnMetaData> getColumnMetaData(String schema, String databaseName, String tableName)
             throws SQLException {
-        LinkedList<IndexMetaData> indexes = new LinkedList<>();
+        LinkedList<ColumnMetaData> columnMetaDataList = new LinkedList<>();
         try (Connection connection = getConnection();) {
             if (StringUtils.isNotBlank(configCommon.getDatabaseType().getDatabaseMetaDataQuerySql())) {
 
             } else {
                 java.sql.DatabaseMetaData metaData = connection.getMetaData();
-                HashMap<IndexMetaData, LinkedList<ColumnMetaData>> indexColumnMetaDataMap = new HashMap<>();
-                try (ResultSet indexInfo = metaData.getIndexInfo(databaseName, schema, tableName, unique, false);) {
-                    while (indexInfo.next()) {
-                        IndexMetaData indexMetaData = new IndexMetaData();
-                        indexMetaData.setName(indexInfo.getString("INDEX_NAME"));
-                        indexMetaData.setType(indexInfo.getString("TYPE"));
-                        indexMetaData.setUnique(!indexInfo.getBoolean("NON_UNIQUE"));
-                        ColumnMetaData columnMetaData = new ColumnMetaData();
-                        columnMetaData.setName(indexInfo.getString("COLUMN_NAME"));
-                        columnMetaData.setOrdinalPosition(indexInfo.getInt("ORDINAL_POSITION"));
-                        if (!indexColumnMetaDataMap.containsKey(indexMetaData)) {
-                            indexColumnMetaDataMap.put(indexMetaData, new LinkedList<>());
-                        }
-                        indexColumnMetaDataMap.get(indexMetaData).addLast(columnMetaData);
+
+                try (ResultSet columns = metaData.getColumns(databaseName, schema, tableName,
+                        "%");) {
+                    while (columns.next()) {
+                        columnMetaDataList.addLast(readColumnMetaDataFromResultSet(columns));
                     }
-                    indexColumnMetaDataMap.forEach((indexMetaData, columnMetaDataList) -> {
-                        indexMetaData.setColumns(new ArrayList<>(columnMetaDataList));
-                        indexes.add(indexMetaData);
-                    });
                 }
             }
         }
-        return indexes;
+        ArrayList<ColumnMetaData> res = new ArrayList<>();
+        columnMetaDataList.stream().sorted((a, b) -> a.getOrdinalPosition() - b.getOrdinalPosition())
+                .forEachOrdered(c -> res.add(c));
+        return res;
+    }
+
+    @Override
+    public Map<String, ArrayList<IndexMetaData>> getIndexMetaData(String tableName, boolean unique)
+            throws UnknowDatabaseException, SQLException {
+        if (!checkDatabaseNameConfigExists()) {
+            throw new UnknowDatabaseException("连接信息中未指定获取哪个数据库");
+        }
+        return getIndexMetaData(configCommon.getSchema(), configCommon.getDatabase(), tableName, unique);
+    }
+
+    @Override
+    public Map<String, ArrayList<IndexMetaData>> getIndexMetaData(String schema, String databaseName, String tableName,
+            boolean unique)
+            throws SQLException {
+        HashMap<String, LinkedList<IndexMetaData>> indexColumnMetaDataMap = new HashMap<>();
+        try (Connection connection = getConnection();) {
+            if (StringUtils.isNotBlank(configCommon.getDatabaseType().getDatabaseMetaDataQuerySql())) {
+
+            } else {
+                java.sql.DatabaseMetaData metaData = connection.getMetaData();
+                try (ResultSet indexInfo = metaData.getIndexInfo(databaseName, schema, tableName, unique, false);) {
+                    while (indexInfo.next()) {
+                        IndexMetaData indexMetaData = new IndexMetaData();
+                        indexMetaData.setIndexName(indexInfo.getString("INDEX_NAME"));
+                        indexMetaData.setType(indexInfo.getString("TYPE"));
+                        indexMetaData.setNonUnique(indexInfo.getBoolean("NON_UNIQUE"));
+                        indexMetaData.setColumnName(indexInfo.getString("COLUMN_NAME"));
+                        indexMetaData.setOrdinalPosition(indexInfo.getInt("ORDINAL_POSITION"));
+                        indexMetaData.setAscOrDesc(indexInfo.getString("ASC_OR_DESC"));
+                        if (!indexColumnMetaDataMap.containsKey(indexMetaData.getIndexName())) {
+                            indexColumnMetaDataMap.put(indexMetaData.getIndexName(), new LinkedList<>());
+                        }
+                        indexColumnMetaDataMap.get(indexMetaData.getIndexName()).addLast(indexMetaData);
+                    }
+                }
+            }
+        }
+        if (indexColumnMetaDataMap.size() > 0) {
+            return indexColumnMetaDataMap.values().stream().map(linkedList -> {
+                ArrayList<IndexMetaData> arrayList = new ArrayList<>(linkedList.size());
+                linkedList.stream().sorted((a, b) -> a.getOrdinalPosition() - b.getOrdinalPosition())
+                        .forEachOrdered(i -> {
+                            arrayList.add(i);
+                        });
+                return arrayList;
+            }).collect(Collectors.toMap(arrayList -> arrayList.get(0).getIndexName(), arrayList -> arrayList));
+        } else {
+            return Collections.emptyMap();
+        }
+    }
+
+    @Override
+    public ArrayList<PrimaryKeyMetaData> getPrimaryKeys(String tableName) throws SQLException, UnknowDatabaseException {
+        if (!checkDatabaseNameConfigExists()) {
+            throw new UnknowDatabaseException("连接信息中未指定获取哪个数据库");
+        }
+        return getPrimaryKeys(configCommon.getSchema(), configCommon.getDatabase(), tableName);
+    }
+
+    @Override
+    public ArrayList<PrimaryKeyMetaData> getPrimaryKeys(String schema, String databaseName, String tableName)
+            throws SQLException {
+        LinkedList<PrimaryKeyMetaData> temp = new LinkedList<>();
+        try (Connection connection = getConnection();) {
+            if (StringUtils.isNotBlank(configCommon.getDatabaseType().getDatabaseMetaDataQuerySql())) {
+
+            } else {
+                java.sql.DatabaseMetaData metaData = connection.getMetaData();
+                try (ResultSet resultSet = metaData.getPrimaryKeys(databaseName, schema, tableName)) {
+                    while (resultSet.next()) {
+                        PrimaryKeyMetaData primaryKey = new PrimaryKeyMetaData();
+                        primaryKey.setPkName(resultSet.getString("PK_NAME"));
+                        primaryKey.setColumnName(resultSet.getString("COLUMN_NAME"));
+                        primaryKey.setKeySeq(resultSet.getInt("KEY_SEQ"));
+                        temp.add(primaryKey);
+                    }
+                }
+            }
+        }
+        ArrayList<PrimaryKeyMetaData> primaryKeys = new ArrayList<>(temp.size());
+        temp.stream().sorted((a, b) -> a.getKeySeq() - b.getKeySeq()).forEachOrdered(p -> {
+            primaryKeys.add(p);
+        });
+        return primaryKeys;
     }
 
     @Override
@@ -312,21 +393,23 @@ public abstract class DataSourceCommon implements DataSource {
     }
 
     @Override
+    public List<String> getTableNames() throws UnknowDatabaseException, SQLException {
+        if (!checkDatabaseNameConfigExists()) {
+            throw new UnknowDatabaseException("连接信息中未指定获取哪个数据库");
+        }
+        return getTableNames(configCommon.getDatabase());
+    }
+
+    @Override
     public List<String> getTableNames(String databaseName) throws UnknowDatabaseException, SQLException {
         LinkedList<String> res = new LinkedList<>();
-        Connection connection = getConnection();
-        try {
+        try (Connection connection = getConnection();) {
             connection.setAutoCommit(false);
             connection.prepareStatement("use " + databaseName).execute();
             try (ResultSet executeQuery = connection.prepareStatement("show tables").executeQuery();) {
                 while (executeQuery.next()) {
                     res.add(executeQuery.getString(1));
                 }
-            }
-        } finally {
-            if (connection != null) {
-                connection.close();
-                connection.commit();
             }
         }
         return res;

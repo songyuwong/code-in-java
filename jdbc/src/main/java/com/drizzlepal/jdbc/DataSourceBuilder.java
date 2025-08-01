@@ -4,7 +4,7 @@ import com.drizzlepal.jdbc.exception.JdbcException;
 
 public class DataSourceBuilder {
 
-    private final DatabaseConfigCommon databaseConfig;
+    private final DefaultDatabaseConfig databaseConfig;
 
     private DataSourceBuilder(DatabaseType databaseType) {
         databaseConfig = databaseType.initDataConfig();

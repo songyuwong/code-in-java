@@ -8,7 +8,7 @@ import com.drizzlepal.utils.StringUtils;
 import lombok.Data;
 
 @Data
-public abstract class DatabaseConfigCommon implements DatabaseConfig {
+public abstract class DefaultDatabaseConfig implements DatabaseConfig {
 
     private final DatabaseType databaseType;
 

@@ -7,13 +7,16 @@ package com.drizzlepal.jdbc;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import com.drizzlepal.jdbc.exception.ConnectionOperationException;
 import com.drizzlepal.jdbc.exception.UnknowDatabaseException;
 import com.drizzlepal.jdbc.metadata.ColumnMetaData;
 import com.drizzlepal.jdbc.metadata.DatabaseMetaData;
 import com.drizzlepal.jdbc.metadata.IndexMetaData;
+import com.drizzlepal.jdbc.metadata.PrimaryKeyMetaData;
 import com.drizzlepal.jdbc.metadata.TableMetaData;
 import com.drizzlepal.utils.functions.ConsumerThrowable;
 
@@ -104,16 +107,21 @@ public interface DataSource extends AutoCloseable {
 	ColumnMetaData getColumnMetaData(String schema, String databaseName, String tableName, String columnName)
 			throws SQLException;
 
+	ArrayList<ColumnMetaData> getColumnMetaData(String tableName) throws UnknowDatabaseException, SQLException;
+
+	ArrayList<ColumnMetaData> getColumnMetaData(String schema, String databaseName, String tableName)
+			throws SQLException;
+
 	/**
 	 * 根据表名和是否唯一的标志获取索引元数据
 	 * 
 	 * @param tableName 表名称
 	 * @param unique    索引是否唯一的标志
-	 * @return 包含IndexMetaData对象的列表，每个对象代表一个索引的元数据信息
+	 * @return 索引元数据集合 key 为索引名称，value 为索引元数据对象按索引字段序的列表
 	 * @throws UnknowDatabaseException 如果数据库未知
 	 * @throws SQLException            如果获取元数据时发生SQL异常
 	 */
-	List<IndexMetaData> getIndexMetaData(String tableName, boolean unique)
+	Map<String, ArrayList<IndexMetaData>> getIndexMetaData(String tableName, boolean unique)
 			throws UnknowDatabaseException, SQLException;
 
 	/**
@@ -123,10 +131,34 @@ public interface DataSource extends AutoCloseable {
 	 * @param databaseName 数据库名称
 	 * @param tableName    表名称
 	 * @param unique       索引是否唯一的标志
-	 * @return 包含IndexMetaData对象的列表，每个对象代表一个索引的元数据信息
+	 * @return 索引元数据集合 key 为索引名称，value 为索引元数据对象按索引字段序的列表
 	 * @throws SQLException 如果获取元数据时发生SQL异常
 	 */
-	List<IndexMetaData> getIndexMetaData(String schema, String databaseName, String tableName, boolean unique)
+	Map<String, ArrayList<IndexMetaData>> getIndexMetaData(String schema, String databaseName, String tableName,
+			boolean unique)
+			throws SQLException;
+
+	/**
+	 * 获取表主键元数据信息
+	 * 
+	 * @param tableName 表名称
+	 * @return 主键元数据对象
+	 * @throws SQLException            如果获取元数据时发生SQL异常
+	 * @throws UnknowDatabaseException 如果数据库名称未知
+	 */
+	ArrayList<PrimaryKeyMetaData> getPrimaryKeys(String tableName)
+			throws SQLException, UnknowDatabaseException;
+
+	/**
+	 * 获取表主键元数据信息
+	 * 
+	 * @param schema       数据库模式
+	 * @param databaseName 数据库名称
+	 * @param tableName    表名称
+	 * @return 表主键元数据信息
+	 * @throws SQLException 如果获取元数据时发生SQL异常
+	 */
+	ArrayList<PrimaryKeyMetaData> getPrimaryKeys(String schema, String databaseName, String tableName)
 			throws SQLException;
 
 	/**
@@ -137,6 +169,8 @@ public interface DataSource extends AutoCloseable {
 	 * @throws SQLException            如果获取数据库名称时发生SQL异常
 	 */
 	List<String> getDatabaseNames() throws UnknowDatabaseException, SQLException;
+
+	List<String> getTableNames() throws UnknowDatabaseException, SQLException;
 
 	/**
 	 * 根据数据库名获取所有表名称的列表
