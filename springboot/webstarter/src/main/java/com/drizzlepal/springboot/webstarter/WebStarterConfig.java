@@ -1,24 +1,20 @@
 package com.drizzlepal.springboot.webstarter;
 
 import java.nio.charset.StandardCharsets;
+import java.util.Collections;
 import java.util.List;
 
-import org.springframework.beans.BeansException;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.lang.NonNull;
-import org.springframework.web.servlet.HandlerExceptionResolver;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-import org.springframework.web.servlet.mvc.support.DefaultHandlerExceptionResolver;
 
 import com.alibaba.fastjson2.filter.PropertyFilter;
 import com.alibaba.fastjson2.support.config.FastJsonConfig;
-import com.alibaba.fastjson2.support.spring6.http.converter.FastJsonHttpMessageConverter;
+import com.alibaba.fastjson2.support.spring.http.converter.FastJsonHttpMessageConverter;
 import com.drizzlepal.springboot.webstarter.props.DrizzlepalWebStarterProps;
 
 import lombok.extern.slf4j.Slf4j;
@@ -27,14 +23,7 @@ import lombok.extern.slf4j.Slf4j;
 @AutoConfiguration
 @EnableConfigurationProperties(DrizzlepalWebStarterProps.class)
 @ComponentScan("com.drizzlepal.springboot.webstarter")
-public class WebStarterConfig implements WebMvcConfigurer, ApplicationContextAware {
-
-    private ApplicationContext applicationContext;
-
-    @Override
-    public void setApplicationContext(@NonNull ApplicationContext applicationContext) throws BeansException {
-        this.applicationContext = applicationContext;
-    }
+public class WebStarterConfig implements WebMvcConfigurer {
 
     /**
      * 配置消息转换器
@@ -50,7 +39,7 @@ public class WebStarterConfig implements WebMvcConfigurer, ApplicationContextAwa
         config.setWriterFilters(new NullFilter());
         converter.setFastJsonConfig(config);
         converter.setDefaultCharset(StandardCharsets.UTF_8);
-        converter.setSupportedMediaTypes(List.of(MediaType.APPLICATION_JSON));
+        converter.setSupportedMediaTypes(Collections.singletonList(MediaType.APPLICATION_JSON));
         // 将自定义的转换器添加到列表中
         converters.add(0, converter);
     }
@@ -63,16 +52,6 @@ public class WebStarterConfig implements WebMvcConfigurer, ApplicationContextAwa
             return value != null;
         }
 
-    }
-
-    @Override
-    public void extendHandlerExceptionResolvers(@NonNull List<HandlerExceptionResolver> resolvers) {
-        if (resolvers.removeIf(resolver -> resolver instanceof DefaultHandlerExceptionResolver)) {
-            resolvers.add(applicationContext.getBean(WebHandlerExceptionResolver.class));
-        } else {
-            log.warn(
-                    "将 org.springframework.web.servlet.mvc.support.DefaultHandlerExceptionResolver 替换成 com.songyu.springboot.starter.web.mvc.WebHandlerExceptionResolver 失败，部分 Web 异常返回数据可能不是 WebResponse JSON 格式");
-        }
     }
 
 }

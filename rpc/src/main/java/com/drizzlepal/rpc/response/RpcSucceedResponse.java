@@ -1,5 +1,8 @@
 package com.drizzlepal.rpc.response;
 
+import com.drizzlepal.rpc.RpcResponse;
+import com.drizzlepal.rpc.RpcStatusCommon;
+
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -10,8 +13,12 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper = true)
 public class RpcSucceedResponse extends RpcResponse {
 
+    public RpcSucceedResponse() {
+        super(RpcStatusCommon.SUCCESS, null);
+    }
+
     public RpcSucceedResponse(Object data) {
-        this.data = data;
+        super(RpcStatusCommon.SUCCESS, data);
     }
 
 }

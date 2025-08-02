@@ -1,17 +1,17 @@
 package com.drizzlepal.jdbc.database.mysql;
 
-import com.drizzlepal.jdbc.DatabaseConfigCommon;
-import com.drizzlepal.jdbc.DataSourceCommon;
+import com.drizzlepal.jdbc.DefaultDatabaseConfig;
+import com.drizzlepal.jdbc.DefaultDataSource;
 import com.drizzlepal.utils.StringUtils;
 
-public class DataSourceMysql extends DataSourceCommon {
+public class DataSourceMysql extends DefaultDataSource {
 
-    public DataSourceMysql(DatabaseConfigCommon configCommon) {
+    public DataSourceMysql(DefaultDatabaseConfig configCommon) {
         super(configCommon);
     }
 
     @Override
-    public String buildJdbcUrl(DatabaseConfigCommon configCommon) {
+    public String buildJdbcUrl(DefaultDatabaseConfig configCommon) {
         StringBuilder stringBuilder = new StringBuilder("jdbc:mysql://");
         stringBuilder.append(configCommon.getHost());
         stringBuilder.append(":");

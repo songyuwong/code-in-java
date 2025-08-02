@@ -1,16 +1,16 @@
 package com.drizzlepal.jdbc.database.sqlserver;
 
-import com.drizzlepal.jdbc.DatabaseConfigCommon;
-import com.drizzlepal.jdbc.DataSourceCommon;
+import com.drizzlepal.jdbc.DefaultDatabaseConfig;
+import com.drizzlepal.jdbc.DefaultDataSource;
 
-public class DataSourceSqlServer extends DataSourceCommon {
+public class DataSourceSqlServer extends DefaultDataSource {
 
-    public DataSourceSqlServer(DatabaseConfigCommon configCommon) {
+    public DataSourceSqlServer(DefaultDatabaseConfig configCommon) {
         super(configCommon);
     }
 
     @Override
-    public String buildJdbcUrl(DatabaseConfigCommon configCommon) {
+    public String buildJdbcUrl(DefaultDatabaseConfig configCommon) {
         return String.format("jdbc:sqlserver://%s:%s;databaseName=%s", configCommon.getHost(), configCommon.getPort(),
                 configCommon.getDatabase());
     }

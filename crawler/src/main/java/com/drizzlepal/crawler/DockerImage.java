@@ -48,17 +48,17 @@ public class DockerImage implements Crawler<String> {
         });
         // 输出镜像内容
 
-        StringJoiner stringJoiner = new StringJoiner(",\n", """
-                sudo tee /etc/docker/daemon.json <<-'EOF'
-                {
-                    "registry-mirrors": [
-                        """, """
-
-                        ]
-                    }
-
-                EOF
-                                    """);
+        StringJoiner stringJoiner = new StringJoiner(",\n",
+                "                sudo tee /etc/docker/daemon.json <<-'EOF'\n" + //
+                        "                {\n" + //
+                        "                    \"registry-mirrors\": [\n" + //
+                        "                        ",
+                "\n" + //
+                        "\n" + //
+                        "                                ]\n" + //
+                        "                            }\n" + //
+                        "\n" + //
+                        "                        EOF");
         images.forEach(image -> {
             stringJoiner.add("        " + image);
         });

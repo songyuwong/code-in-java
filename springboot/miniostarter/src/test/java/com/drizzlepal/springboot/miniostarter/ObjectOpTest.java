@@ -2,14 +2,14 @@ package com.drizzlepal.springboot.miniostarter;
 
 import java.io.InputStream;
 
+import javax.annotation.Resource;
+
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ContextConfiguration;
 
 import com.drizzlepal.springboot.miniostarter.exception.DrizzlepalMinioObjectOpException;
 import com.drizzlepal.utils.FileUtils;
-
-import jakarta.annotation.Resource;
 
 @SpringBootTest
 @ContextConfiguration(classes = MinioStarterConfig.class)
@@ -20,9 +20,9 @@ public class ObjectOpTest {
 
     @Test
     public void testPutObject() throws Exception {
-        FileUtils.fileInputStreamHandler("/home/songyu/Desktop/clickhouse-jdbc-0.3.2-patch10-all.jar", sc -> {
+        FileUtils.resourcesFileInputStreamConsumer(sc -> {
             minioTemplate.putObject("test", "test", sc);
-        });
+        }, "/home/songyu/Desktop/clickhouse-jdbc-0.3.2-patch10-all.jar");
     }
 
     @Test

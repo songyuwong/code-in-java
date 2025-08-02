@@ -1,6 +1,7 @@
 package com.drizzlepal.utils;
 
-import java.io.File;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import java.io.IOException;
 
 import org.junit.jupiter.api.Test;
@@ -8,9 +9,8 @@ import org.junit.jupiter.api.Test;
 public class FileUtilsTest {
     @Test
     public void testGetClassPathOutputStream() throws IOException {
-        File classPathFile = FileUtils.getClassPathFile("test.txt");
-        String absolutePath = classPathFile.getAbsolutePath();
-        System.out.println(absolutePath);
+        String validFileName = FileUtils.makeValidFileName("门诊处方/医嘱");
+        assertEquals("门诊处方医嘱", validFileName);
     }
 
 }

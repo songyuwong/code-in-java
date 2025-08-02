@@ -18,9 +18,9 @@ public enum DatabaseType {
     SQL_SERVER(config -> new DataSourceSqlServer(config), () -> new DatabaseConfigSqlServer(),
             "com.microsoft.sqlserver.jdbc.SQLServerDriver", "SELECT 1", new String[] { "TABLE" }, null, null);
 
-    private final Function<DatabaseConfigCommon, DataSourceCommon> datasourceSupplier;
+    private final Function<DefaultDatabaseConfig, DefaultDataSource> datasourceSupplier;
 
-    private final Supplier<DatabaseConfigCommon> databaseConfigSupplier;
+    private final Supplier<DefaultDatabaseConfig> databaseConfigSupplier;
 
     @Getter
     private final String driverClassName;
@@ -37,8 +37,8 @@ public enum DatabaseType {
     @Getter
     private final String[] databaseTableTypes;
 
-    private DatabaseType(Function<DatabaseConfigCommon, DataSourceCommon> datasourceSupplier,
-            Supplier<DatabaseConfigCommon> databaseConfigSupplier, String driverClassName, String connectionInitSql,
+    private DatabaseType(Function<DefaultDatabaseConfig, DefaultDataSource> datasourceSupplier,
+            Supplier<DefaultDatabaseConfig> databaseConfigSupplier, String driverClassName, String connectionInitSql,
             String[] databaseTableTypes,
             String databaseMetaDataQuerySql,
             DatabaseMetaDataQuerySqlParameterSetter databaseMetaDataQuerySqlParameterSetter) {
@@ -51,11 +51,11 @@ public enum DatabaseType {
         this.databaseTableTypes = databaseTableTypes;
     }
 
-    DataSourceCommon initDataSource(DatabaseConfigCommon config) {
+    DefaultDataSource initDataSource(DefaultDatabaseConfig config) {
         return datasourceSupplier.apply(config);
     }
 
-    DatabaseConfigCommon initDataConfig() {
+    DefaultDatabaseConfig initDataConfig() {
         return databaseConfigSupplier.get();
     }
 

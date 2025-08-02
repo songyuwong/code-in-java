@@ -2,10 +2,10 @@ package com.drizzlepal.jdbc.database.mysql;
 
 import java.util.HashMap;
 
-import com.drizzlepal.jdbc.DatabaseConfigCommon;
+import com.drizzlepal.jdbc.DefaultDatabaseConfig;
 import com.drizzlepal.jdbc.DatabaseType;
 
-public class DatabaseConfigMysql extends DatabaseConfigCommon {
+public class DatabaseConfigMysql extends DefaultDatabaseConfig {
 
     public DatabaseConfigMysql() {
         super(DatabaseType.MYSQL, new HashMap<String, String>() {

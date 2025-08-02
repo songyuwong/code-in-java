@@ -1,6 +1,7 @@
 package com.drizzlepal.rpc.exception;
 
-import org.springframework.http.HttpStatus;
+import com.drizzlepal.rpc.RpcException;
+import com.drizzlepal.rpc.RpcStatusCommon;
 
 /**
  * 未授权异常
@@ -20,8 +21,8 @@ public class UnauthorizedException extends RpcException {
     }
 
     @Override
-    public HttpStatus httpStatus() {
-        return HttpStatus.UNAUTHORIZED;
+    public RpcStatusCommon getRpcStatus() {
+        return RpcStatusCommon.UNAUTHORIZED;
     }
 
 }

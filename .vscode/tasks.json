@@ -1,0 +1,26 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "rebuild code-in-java",
+            "type": "shell",
+            "command": "/workspace/mise/workdir/data/installs/mvnd/1.0.2/maven-mvnd-1.0.2-linux-amd64/bin/mvnd",
+            "args": [
+                "-s",
+                "/workspace/maven-settings.xml",
+                "-f",
+                "/workspace/projects/code-in-java/pom.xml",
+                "-Dmaven.test.skip=true",
+                "clean",
+                "compile",
+                "package",
+                "install"
+            ],
+            "options": {
+                "env": {
+                    "JAVA_HOME": "/workspace/mise/workdir/data/installs/java/liberica-8u452+11"
+                }
+            },
+        },
+    ]
+}
