@@ -5,12 +5,12 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>com.drizzlepal</groupId>
-        <artifactId>parent8</artifactId>
+        <artifactId>parent</artifactId>
         <version>1.0.0</version>
     </parent>
 
     <groupId>com.drizzlepal</groupId>
-    <artifactId>utils8</artifactId>
+    <artifactId>utils</artifactId>
     <name>drizzlepal utils</name>
     <description>drizzlepal utils 工具收集</description>
 

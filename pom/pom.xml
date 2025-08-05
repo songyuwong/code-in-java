@@ -6,12 +6,12 @@
 
     <parent>
         <groupId>com.drizzlepal</groupId>
-        <artifactId>parent8</artifactId>
+        <artifactId>parent</artifactId>
         <version>1.0.0</version>
     </parent>
 
     <groupId>com.drizzlepal</groupId>
-    <artifactId>pom8</artifactId>
+    <artifactId>pom</artifactId>
     <packaging>pom</packaging>
     <name>drizzlepal pom</name>
     <description>drizzlepal 依赖管理，用于给使用方提供 drizzlepal 子模块版本控制</description>
@@ -20,27 +20,27 @@
         <dependencies>
             <dependency>
                 <groupId>com.drizzlepal.springboot</groupId>
-                <artifactId>webstarter8</artifactId>
+                <artifactId>webstarter</artifactId>
                 <version>${revision}</version>
             </dependency>
             <dependency>
                 <groupId>com.drizzlepal</groupId>
-                <artifactId>utils8</artifactId>
+                <artifactId>utils</artifactId>
                 <version>${revision}</version>
             </dependency>
             <dependency>
                 <groupId>com.drizzlepal.springboot</groupId>
-                <artifactId>miniostarter8</artifactId>
+                <artifactId>miniostarter</artifactId>
                 <version>${revision}</version>
             </dependency>
             <dependency>
                 <groupId>com.drizzlepal</groupId>
-                <artifactId>jdbc8</artifactId>
+                <artifactId>jdbc</artifactId>
                 <version>${revision}</version>
             </dependency>
             <dependency>
                 <groupId>com.drizzlepal</groupId>
-                <artifactId>token8</artifactId>
+                <artifactId>token</artifactId>
                 <version>${revision}</version>
             </dependency>
         </dependencies>

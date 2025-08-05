@@ -4,12 +4,12 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>com.drizzlepal</groupId>
-        <artifactId>parent8</artifactId>
+        <artifactId>parent</artifactId>
         <version>1.0.0</version>
     </parent>
 
     <groupId>com.drizzlepal</groupId>
-    <artifactId>crawler8</artifactId>
+    <artifactId>crawler</artifactId>
     <name>drizzlepal crawler</name>
     <description>drizzlepal crawler 爬虫收集</description>
 
