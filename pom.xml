@@ -193,4 +193,30 @@
         </dependency>
     </dependencies>
 
+    <distributionManagement>
+        <repository>
+            <id>localnexus</id>
+            <name>Nexus Releases Repository</name>
+            <url>http://localhost:8081/repository/songyu-releases/</url>
+        </repository>
+        <snapshotRepository>
+            <id>localnexus</id>
+            <name>Nexus Snapshots Repository</name>
+            <url>http://localhost:8081/repository/songyu-snapshots/</url>
+        </snapshotRepository>
+    </distributionManagement>
+
+    <pluginRepositories>
+        <pluginRepository>
+            <id>snapshots</id>
+            <url>http://localhost:8081/repository/maven-snapshots/</url>
+            <snapshots>
+                <enabled>true</enabled>
+                <updatePolicy>always</updatePolicy>
+            </snapshots>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+        </pluginRepository>
+    </pluginRepositories>
 </project>

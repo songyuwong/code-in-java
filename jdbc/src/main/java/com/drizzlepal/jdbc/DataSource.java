@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.drizzlepal.jdbc.exception.ConnectionOperationException;
-import com.drizzlepal.jdbc.exception.UnknowDatabaseException;
+import com.drizzlepal.jdbc.exception.UnknownDatabaseException;
 import com.drizzlepal.jdbc.metadata.ColumnMetaData;
 import com.drizzlepal.jdbc.metadata.DatabaseMetaData;
 import com.drizzlepal.jdbc.metadata.IndexMetaData;
@@ -46,10 +46,10 @@ public interface DataSource extends AutoCloseable {
 	 * 获取数据库元数据
 	 * 
 	 * @return DatabaseMetaData对象，包含数据库的元数据信息
-	 * @throws UnknowDatabaseException 如果数据库未知
-	 * @throws SQLException            如果获取元数据时发生SQL异常
+	 * @throws UnknownDatabaseException 如果数据库未知
+	 * @throws SQLException             如果获取元数据时发生SQL异常
 	 */
-	DatabaseMetaData getMetaData() throws UnknowDatabaseException, SQLException;
+	DatabaseMetaData getMetaData() throws UnknownDatabaseException, SQLException;
 
 	/**
 	 * 根据指定的schema和数据库名获取数据库元数据
@@ -66,10 +66,10 @@ public interface DataSource extends AutoCloseable {
 	 * 
 	 * @param tableName 表名称
 	 * @return TableMetaData对象，包含指定表的元数据信息
-	 * @throws UnknowDatabaseException 如果数据库未知
-	 * @throws SQLException            如果获取元数据时发生SQL异常
+	 * @throws UnknownDatabaseException 如果数据库未知
+	 * @throws SQLException             如果获取元数据时发生SQL异常
 	 */
-	TableMetaData getTableMetaData(String tableName) throws UnknowDatabaseException, SQLException;
+	TableMetaData getTableMetaData(String tableName) throws UnknownDatabaseException, SQLException;
 
 	/**
 	 * 根据指定的schema、数据库名和表名获取表元数据
@@ -88,11 +88,11 @@ public interface DataSource extends AutoCloseable {
 	 * @param tableName  表名称
 	 * @param columnName 列名称
 	 * @return ColumnMetaData对象，包含指定列的元数据信息
-	 * @throws UnknowDatabaseException 如果数据库未知
-	 * @throws SQLException            如果获取元数据时发生SQL异常
+	 * @throws UnknownDatabaseException 如果数据库未知
+	 * @throws SQLException             如果获取元数据时发生SQL异常
 	 */
 	ColumnMetaData getColumnMetaData(String tableName, String columnName)
-			throws UnknowDatabaseException, SQLException;
+			throws UnknownDatabaseException, SQLException;
 
 	/**
 	 * 根据指定的schema、数据库名、表名和列名获取列元数据
@@ -107,7 +107,7 @@ public interface DataSource extends AutoCloseable {
 	ColumnMetaData getColumnMetaData(String schema, String databaseName, String tableName, String columnName)
 			throws SQLException;
 
-	ArrayList<ColumnMetaData> getColumnMetaData(String tableName) throws UnknowDatabaseException, SQLException;
+	ArrayList<ColumnMetaData> getColumnMetaData(String tableName) throws UnknownDatabaseException, SQLException;
 
 	ArrayList<ColumnMetaData> getColumnMetaData(String schema, String databaseName, String tableName)
 			throws SQLException;
@@ -118,11 +118,11 @@ public interface DataSource extends AutoCloseable {
 	 * @param tableName 表名称
 	 * @param unique    索引是否唯一的标志
 	 * @return 索引元数据集合 key 为索引名称，value 为索引元数据对象按索引字段序的列表
-	 * @throws UnknowDatabaseException 如果数据库未知
-	 * @throws SQLException            如果获取元数据时发生SQL异常
+	 * @throws UnknownDatabaseException 如果数据库未知
+	 * @throws SQLException             如果获取元数据时发生SQL异常
 	 */
 	Map<String, ArrayList<IndexMetaData>> getIndexMetaData(String tableName, boolean unique)
-			throws UnknowDatabaseException, SQLException;
+			throws UnknownDatabaseException, SQLException;
 
 	/**
 	 * 根据指定的schema、数据库名、表名和是否唯一的标志获取索引元数据
@@ -143,11 +143,11 @@ public interface DataSource extends AutoCloseable {
 	 * 
 	 * @param tableName 表名称
 	 * @return 主键元数据对象
-	 * @throws SQLException            如果获取元数据时发生SQL异常
-	 * @throws UnknowDatabaseException 如果数据库名称未知
+	 * @throws SQLException             如果获取元数据时发生SQL异常
+	 * @throws UnknownDatabaseException 如果数据库名称未知
 	 */
 	ArrayList<PrimaryKeyMetaData> getPrimaryKeys(String tableName)
-			throws SQLException, UnknowDatabaseException;
+			throws SQLException, UnknownDatabaseException;
 
 	/**
 	 * 获取表主键元数据信息
@@ -165,22 +165,22 @@ public interface DataSource extends AutoCloseable {
 	 * 获取所有数据库名称的列表
 	 * 
 	 * @return 包含所有数据库名称的列表
-	 * @throws UnknowDatabaseException 如果数据库未知
-	 * @throws SQLException            如果获取数据库名称时发生SQL异常
+	 * @throws UnknownDatabaseException 如果数据库未知
+	 * @throws SQLException             如果获取数据库名称时发生SQL异常
 	 */
-	List<String> getDatabaseNames() throws UnknowDatabaseException, SQLException;
+	List<String> getDatabaseNames() throws UnknownDatabaseException, SQLException;
 
-	List<String> getTableNames() throws UnknowDatabaseException, SQLException;
+	List<String> getTableNames() throws UnknownDatabaseException, SQLException;
 
 	/**
 	 * 根据数据库名获取所有表名称的列表
 	 * 
 	 * @param databaseName 数据库名称
 	 * @return 包含指定数据库中所有表名称的列表
-	 * @throws UnknowDatabaseException 如果数据库未知
-	 * @throws SQLException            如果获取表名称时发生SQL异常
+	 * @throws UnknownDatabaseException 如果数据库未知
+	 * @throws SQLException             如果获取表名称时发生SQL异常
 	 */
-	List<String> getTableNames(String databaseName) throws UnknowDatabaseException, SQLException;
+	List<String> getTableNames(String databaseName) throws UnknownDatabaseException, SQLException;
 
 	/**
 	 * 根据结果集获取元数据列标签的列表
@@ -196,11 +196,11 @@ public interface DataSource extends AutoCloseable {
 	 * 
 	 * @param tableName 表名称
 	 * @return 包含默认列元数据列标签的列表
-	 * @throws UnknowDatabaseException 如果数据库未知
-	 * @throws SQLException            如果获取元数据时发生SQL异常
+	 * @throws UnknownDatabaseException 如果数据库未知
+	 * @throws SQLException             如果获取元数据时发生SQL异常
 	 */
 	List<String> getDefaultColumnsResultSetMetaDataColumnLabels(String tableName)
-			throws UnknowDatabaseException, SQLException;
+			throws UnknownDatabaseException, SQLException;
 
 	/**
 	 * 根据指定的schema、数据库名和表名获取默认列元数据列标签的列表
@@ -220,11 +220,11 @@ public interface DataSource extends AutoCloseable {
 	 * 
 	 * @param tableName 表名称
 	 * @return 包含默认索引元数据列标签的列表
-	 * @throws UnknowDatabaseException 如果数据库未知
-	 * @throws SQLException            如果获取元数据时发生SQL异常
+	 * @throws UnknownDatabaseException 如果数据库未知
+	 * @throws SQLException             如果获取元数据时发生SQL异常
 	 */
 	List<String> getDefaultIndexesResultSetMetaDataColumnLabels(String tableName)
-			throws UnknowDatabaseException, SQLException;
+			throws UnknownDatabaseException, SQLException;
 
 	/**
 	 * 根据指定的schema、数据库名和表名获取默认索引元数据列标签的列表
@@ -244,11 +244,11 @@ public interface DataSource extends AutoCloseable {
 	 * 
 	 * @param tableName 表名称
 	 * @return 包含默认表元数据列标签的列表
-	 * @throws UnknowDatabaseException 如果数据库未知
-	 * @throws SQLException            如果获取元数据时发生SQL异常
+	 * @throws UnknownDatabaseException 如果数据库未知
+	 * @throws SQLException             如果获取元数据时发生SQL异常
 	 */
 	List<String> getDefaultTableResultSetMetaDataColumnLabels(String tableName)
-			throws UnknowDatabaseException, SQLException;
+			throws UnknownDatabaseException, SQLException;
 
 	/**
 	 * 根据指定的schema、数据库名和表名获取默认表元数据列标签的列表

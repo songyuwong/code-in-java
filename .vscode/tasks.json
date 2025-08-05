@@ -14,7 +14,8 @@
                 "clean",
                 "compile",
                 "package",
-                "install"
+                "install",
+                "deploy"
             ],
             "options": {
                 "env": {

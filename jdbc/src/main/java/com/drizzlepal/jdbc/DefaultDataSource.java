@@ -14,7 +14,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import com.drizzlepal.jdbc.exception.ConnectionOperationException;
-import com.drizzlepal.jdbc.exception.UnknowDatabaseException;
+import com.drizzlepal.jdbc.exception.UnknownDatabaseException;
 import com.drizzlepal.jdbc.metadata.ColumnInfoLabels;
 import com.drizzlepal.jdbc.metadata.ColumnMetaData;
 import com.drizzlepal.jdbc.metadata.DatabaseMetaData;
@@ -66,7 +66,7 @@ public abstract class DefaultDataSource implements DataSource {
     public abstract String buildJdbcUrl(DefaultDatabaseConfig configCommon);
 
     @Override
-    public List<String> getDatabaseNames() throws UnknowDatabaseException, SQLException {
+    public List<String> getDatabaseNames() throws UnknownDatabaseException, SQLException {
         LinkedList<String> res = new LinkedList<>();
         try (Connection connection = getConnection();
                 PreparedStatement statement = connection.prepareStatement("show databases;");
@@ -79,9 +79,9 @@ public abstract class DefaultDataSource implements DataSource {
     }
 
     @Override
-    public DatabaseMetaData getMetaData() throws UnknowDatabaseException, SQLException {
+    public DatabaseMetaData getMetaData() throws UnknownDatabaseException, SQLException {
         if (!checkDatabaseNameConfigExists()) {
-            throw new UnknowDatabaseException("连接信息中未指定获取哪个数据库");
+            throw new UnknownDatabaseException("连接信息中未指定获取哪个数据库");
         }
         return getMetaData(configCommon.getSchema(), configCommon.getDatabase());
     }
@@ -147,9 +147,9 @@ public abstract class DefaultDataSource implements DataSource {
     }
 
     @Override
-    public TableMetaData getTableMetaData(String tableName) throws UnknowDatabaseException, SQLException {
+    public TableMetaData getTableMetaData(String tableName) throws UnknownDatabaseException, SQLException {
         if (!checkDatabaseNameConfigExists()) {
-            throw new UnknowDatabaseException("连接信息中未指定获取哪个数据库");
+            throw new UnknownDatabaseException("连接信息中未指定获取哪个数据库");
         }
         return getTableMetaData(configCommon.getSchema(), configCommon.getDatabase(), tableName);
     }
@@ -193,7 +193,7 @@ public abstract class DefaultDataSource implements DataSource {
                 columnMetaData.setDecimalDigits(metaData.getScale(i));
                 columnMetaData.setDefaultValue(null);
                 columnMetaData.setLength(metaData.getColumnDisplaySize(i));
-                columnMetaData.setName(metaData.getColumnName(i));
+                columnMetaData.setName(metaData.getColumnLabel(i));
                 columnMetaData.setNullable(null);
                 columnMetaData.setOrdinalPosition(i);
                 columnMetaData.setRemarks(null);
@@ -209,9 +209,9 @@ public abstract class DefaultDataSource implements DataSource {
 
     @Override
     public ColumnMetaData getColumnMetaData(String tableName, String columnName)
-            throws UnknowDatabaseException, SQLException {
+            throws UnknownDatabaseException, SQLException {
         if (!checkDatabaseNameConfigExists()) {
-            throw new UnknowDatabaseException("连接信息中未指定获取哪个数据库");
+            throw new UnknownDatabaseException("连接信息中未指定获取哪个数据库");
         }
         return getColumnMetaData(configCommon.getSchema(), configCommon.getDatabase(), tableName, columnName);
     }
@@ -235,9 +235,9 @@ public abstract class DefaultDataSource implements DataSource {
     }
 
     @Override
-    public ArrayList<ColumnMetaData> getColumnMetaData(String tableName) throws UnknowDatabaseException, SQLException {
+    public ArrayList<ColumnMetaData> getColumnMetaData(String tableName) throws UnknownDatabaseException, SQLException {
         if (!checkDatabaseNameConfigExists()) {
-            throw new UnknowDatabaseException("连接信息中未指定获取哪个数据库");
+            throw new UnknownDatabaseException("连接信息中未指定获取哪个数据库");
         }
         return getColumnMetaData(configCommon.getSchema(), configCommon.getDatabase(), tableName);
     }
@@ -268,9 +268,9 @@ public abstract class DefaultDataSource implements DataSource {
 
     @Override
     public Map<String, ArrayList<IndexMetaData>> getIndexMetaData(String tableName, boolean unique)
-            throws UnknowDatabaseException, SQLException {
+            throws UnknownDatabaseException, SQLException {
         if (!checkDatabaseNameConfigExists()) {
-            throw new UnknowDatabaseException("连接信息中未指定获取哪个数据库");
+            throw new UnknownDatabaseException("连接信息中未指定获取哪个数据库");
         }
         return getIndexMetaData(configCommon.getSchema(), configCommon.getDatabase(), tableName, unique);
     }
@@ -317,9 +317,10 @@ public abstract class DefaultDataSource implements DataSource {
     }
 
     @Override
-    public ArrayList<PrimaryKeyMetaData> getPrimaryKeys(String tableName) throws SQLException, UnknowDatabaseException {
+    public ArrayList<PrimaryKeyMetaData> getPrimaryKeys(String tableName)
+            throws SQLException, UnknownDatabaseException {
         if (!checkDatabaseNameConfigExists()) {
-            throw new UnknowDatabaseException("连接信息中未指定获取哪个数据库");
+            throw new UnknownDatabaseException("连接信息中未指定获取哪个数据库");
         }
         return getPrimaryKeys(configCommon.getSchema(), configCommon.getDatabase(), tableName);
     }
@@ -353,9 +354,9 @@ public abstract class DefaultDataSource implements DataSource {
 
     @Override
     public List<String> getDefaultColumnsResultSetMetaDataColumnLabels(String tableName)
-            throws UnknowDatabaseException, SQLException {
+            throws UnknownDatabaseException, SQLException {
         if (!checkDatabaseNameConfigExists()) {
-            throw new UnknowDatabaseException("连接信息中未指定获取哪个数据库");
+            throw new UnknownDatabaseException("连接信息中未指定获取哪个数据库");
         }
         return getDefaultColumnsResultSetMetaDataColumnLabels(configCommon.getSchema(), configCommon.getDatabase(),
                 tableName);
@@ -372,9 +373,9 @@ public abstract class DefaultDataSource implements DataSource {
 
     @Override
     public List<String> getDefaultIndexesResultSetMetaDataColumnLabels(String tableName)
-            throws UnknowDatabaseException, SQLException {
+            throws UnknownDatabaseException, SQLException {
         if (!checkDatabaseNameConfigExists()) {
-            throw new UnknowDatabaseException("连接信息中未指定获取哪个数据库");
+            throw new UnknownDatabaseException("连接信息中未指定获取哪个数据库");
         }
         return getDefaultIndexesResultSetMetaDataColumnLabels(configCommon.getSchema(), configCommon.getDatabase(),
                 tableName);
@@ -392,9 +393,9 @@ public abstract class DefaultDataSource implements DataSource {
 
     @Override
     public List<String> getDefaultTableResultSetMetaDataColumnLabels(String tableName)
-            throws UnknowDatabaseException, SQLException {
+            throws UnknownDatabaseException, SQLException {
         if (!checkDatabaseNameConfigExists()) {
-            throw new UnknowDatabaseException("连接信息中未指定获取哪个数据库");
+            throw new UnknownDatabaseException("连接信息中未指定获取哪个数据库");
         }
         return getDefaultTableResultSetMetaDataColumnLabels(configCommon.getSchema(), configCommon.getDatabase(),
                 tableName);
@@ -421,15 +422,15 @@ public abstract class DefaultDataSource implements DataSource {
     }
 
     @Override
-    public List<String> getTableNames() throws UnknowDatabaseException, SQLException {
+    public List<String> getTableNames() throws UnknownDatabaseException, SQLException {
         if (!checkDatabaseNameConfigExists()) {
-            throw new UnknowDatabaseException("连接信息中未指定获取哪个数据库");
+            throw new UnknownDatabaseException("连接信息中未指定获取哪个数据库");
         }
         return getTableNames(configCommon.getDatabase());
     }
 
     @Override
-    public List<String> getTableNames(String databaseName) throws UnknowDatabaseException, SQLException {
+    public List<String> getTableNames(String databaseName) throws UnknownDatabaseException, SQLException {
         LinkedList<String> res = new LinkedList<>();
         try (Connection connection = getConnection();) {
             connection.setAutoCommit(false);
