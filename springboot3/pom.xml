@@ -1,29 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>com.drizzlepal</groupId>
-        <artifactId>parent</artifactId>
-        <version>1.0.0</version>
+          <groupId>com.drizzlepal</groupId>
+          <artifactId>parent</artifactId>
+          <version>1.0.0</version>
     </parent>
 
     <groupId>com.drizzlepal</groupId>
-    <artifactId>springboot</artifactId>
+    <artifactId>springboot3</artifactId>
     <packaging>pom</packaging>
-    <name>drizzlepal springboot</name>
-    <description>drizzlepal springboot 相关实现</description>
     <modules>
         <module>webstarter</module>
         <module>miniostarter</module>
     </modules>
+    <name>drizzlepal springboot3</name>
+    <description>drizzlepal springboot3 相关实现</description>
 
     <dependencyManagement>
         <dependencies>
             <dependency>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-dependencies</artifactId>
-                <version>2.7.18</version>
+                <version>3.5.4</version>
                 <scope>import</scope>
                 <type>pom</type>
             </dependency>
@@ -36,5 +37,4 @@
             <artifactId>spring-boot-starter-test</artifactId>
         </dependency>
     </dependencies>
-
 </project>
