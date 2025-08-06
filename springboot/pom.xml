@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>com.drizzlepal</groupId>
@@ -16,6 +17,10 @@
     <modules>
         <module>webstarter</module>
         <module>miniostarter</module>
+        <module>springboot2-pom</module>
+        <module>springboot2-webstarter</module>
+        <module>springboot3-pom</module>
+        <module>springboot3-webstarter</module>
     </modules>
 
     <dependencyManagement>
@@ -26,6 +31,11 @@
                 <version>2.7.18</version>
                 <scope>import</scope>
                 <type>pom</type>
+            </dependency>
+            <dependency>
+                <groupId>com.drizzlepal.springboot</groupId>
+                <artifactId>webstarter</artifactId>
+                <version>${revision}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

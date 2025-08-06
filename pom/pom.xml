@@ -20,17 +20,22 @@
         <dependencies>
             <dependency>
                 <groupId>com.drizzlepal.springboot</groupId>
-                <artifactId>webstarter</artifactId>
+                <artifactId>springboot2-webstarter</artifactId>
                 <version>${revision}</version>
             </dependency>
             <dependency>
-                <groupId>com.drizzlepal</groupId>
-                <artifactId>utils</artifactId>
+                <groupId>com.drizzlepal.springboot</groupId>
+                <artifactId>springboot3-webstarter</artifactId>
                 <version>${revision}</version>
             </dependency>
             <dependency>
                 <groupId>com.drizzlepal.springboot</groupId>
                 <artifactId>miniostarter</artifactId>
+                <version>${revision}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.drizzlepal</groupId>
+                <artifactId>utils</artifactId>
                 <version>${revision}</version>
             </dependency>
             <dependency>

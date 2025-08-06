@@ -20,7 +20,6 @@
         <module>jdbc</module>
         <module>rpc</module>
         <module>crypto</module>
-        <module>springboot3</module>
     </modules>
 
     <properties>
