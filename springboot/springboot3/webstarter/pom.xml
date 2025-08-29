@@ -4,32 +4,20 @@
     xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>com.drizzlepal</groupId>
-        <artifactId>springboot</artifactId>
+        <groupId>com.drizzlepal.springboot</groupId>
+        <artifactId>springboot3</artifactId>
         <version>1.0.0</version>
     </parent>
+
+    <groupId>com.drizzlepal.springboot.springboot3</groupId>
+    <artifactId>webstarter</artifactId>
+    <name>drizzlepal springboot3 web starter</name>
+    <description>drizzlepal springboot3 web starter 封装</description>
 
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
     </properties>
-
-    <groupId>com.drizzlepal.springboot</groupId>
-    <artifactId>springboot3-webstarter</artifactId>
-    <name>drizzlepal springboot3 web starter</name>
-    <description>drizzlepal springboot3 web starter 封装</description>
-
-    <dependencyManagement>
-        <dependencies>
-            <dependency>
-                <groupId>com.drizzlepal.springboot</groupId>
-                <artifactId>springboot3-pom</artifactId>
-                <version>${revision}</version>
-                <scope>import</scope>
-                <type>pom</type>
-            </dependency>
-        </dependencies>
-    </dependencyManagement>
 
     <dependencies>
         <dependency>

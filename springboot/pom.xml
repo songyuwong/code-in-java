@@ -17,10 +17,8 @@
     <modules>
         <module>webstarter</module>
         <module>miniostarter</module>
-        <module>springboot2-pom</module>
-        <module>springboot2-webstarter</module>
-        <module>springboot3-pom</module>
-        <module>springboot3-webstarter</module>
+        <module>springboot2</module>
+        <module>springboot3</module>
     </modules>
 
     <dependencyManagement>

@@ -10,17 +10,21 @@
     </parent>
 
     <groupId>com.drizzlepal.springboot</groupId>
-    <artifactId>springboot3-pom</artifactId>
+    <artifactId>springboot2</artifactId>
     <packaging>pom</packaging>
-    <name>drizzlepal springboot3 pom</name>
-    <description>drizzlepal springboot3 依赖管理，用于给使用方提供 drizzlepal springboot3 子模块版本控制</description>
+    <name>drizzlepal springboot2 parent</name>
+    <description>drizzlepal springboot2 特有模块父类</description>
+    <modules>
+        <module>webstarter</module>
+    </modules>
+
 
     <dependencyManagement>
         <dependencies>
             <dependency>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-dependencies</artifactId>
-                <version>3.5.4</version>
+                <version>2.7.18</version>
                 <scope>import</scope>
                 <type>pom</type>
             </dependency>

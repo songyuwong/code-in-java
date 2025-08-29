@@ -20,6 +20,7 @@
         <module>jdbc</module>
         <module>rpc</module>
         <module>crypto</module>
+        <module>flink</module>
     </modules>
 
     <properties>
