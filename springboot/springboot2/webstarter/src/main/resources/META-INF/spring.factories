@@ -1,2 +1,2 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-com.drizzlepal.springboot.webstarter.WebStarterConfig
+com.drizzlepal.springboot2.webstarter.WebStarterConfig

@@ -19,12 +19,12 @@
     <dependencyManagement>
         <dependencies>
             <dependency>
-                <groupId>com.drizzlepal.springboot.springboot2</groupId>
+                <groupId>com.drizzlepal.springboot2</groupId>
                 <artifactId>webstarter</artifactId>
                 <version>${revision}</version>
             </dependency>
             <dependency>
-                <groupId>com.drizzlepal.springboot.springboot3</groupId>
+                <groupId>com.drizzlepal.springboot3</groupId>
                 <artifactId>webstarter</artifactId>
                 <version>${revision}</version>
             </dependency>
@@ -36,6 +36,16 @@
             <dependency>
                 <groupId>com.drizzlepal</groupId>
                 <artifactId>utils</artifactId>
+                <version>${revision}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.drizzlepal</groupId>
+                <artifactId>crypto</artifactId>
+                <version>${revision}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.drizzlepal</groupId>
+                <artifactId>token</artifactId>
                 <version>${revision}</version>
             </dependency>
             <dependency>

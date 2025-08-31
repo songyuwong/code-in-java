@@ -13,7 +13,7 @@ import lombok.EqualsAndHashCode;
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class RpcFaildResponse extends RpcResponse {
+public class RpcFaildResponse<T> extends RpcResponse<T> {
 
     private String detail;
 
@@ -27,7 +27,7 @@ public class RpcFaildResponse extends RpcResponse {
         this.detail = status.getMessage();
     }
 
-    public RpcFaildResponse(RpcStatus status, Object data) {
+    public RpcFaildResponse(RpcStatus status, T data) {
         super(status, data);
         this.detail = status.getMessage();
     }
@@ -37,17 +37,17 @@ public class RpcFaildResponse extends RpcResponse {
         this.detail = detail;
     }
 
-    public RpcFaildResponse(String detail, Object data) {
+    public RpcFaildResponse(String detail, T data) {
         super(RpcStatusCommon.UNKNOWN_ERROR, data);
         this.detail = detail;
     }
 
     public RpcFaildResponse(RpcException exception) {
-        super(exception.getRpcStatus(), exception.getCause());
+        super(exception.getRpcStatus(), null);
         this.detail = exception.getMessage();
     }
 
-    public RpcFaildResponse(RpcException exception, Object data) {
+    public RpcFaildResponse(RpcException exception, T data) {
         super(exception.getRpcStatus(), data);
         this.detail = exception.getMessage();
     }
@@ -57,34 +57,24 @@ public class RpcFaildResponse extends RpcResponse {
         this.detail = detail;
     }
 
-    public RpcFaildResponse(RpcStatus status, String detail, Object data) {
+    public RpcFaildResponse(RpcStatus status, String detail, T data) {
         super(status, data);
         this.detail = detail;
     }
 
     public RpcFaildResponse(RpcException exception, String detail) {
-        super(exception.getRpcStatus(), exception.getCause());
+        super(exception.getRpcStatus(), null);
         this.detail = detail;
     }
 
-    public RpcFaildResponse(RpcException exception, String detail, Object data) {
+    public RpcFaildResponse(RpcException exception, String detail, T data) {
         super(exception.getRpcStatus(), data);
         this.detail = detail;
     }
 
     public RpcFaildResponse(RpcStatus status, Throwable cause) {
-        super(status, cause);
-        this.detail = status.getMessage();
-    }
-
-    public RpcFaildResponse(RpcStatus status, String detail, Throwable cause) {
-        super(status, cause);
-        this.detail = detail;
-    }
-
-    public RpcFaildResponse(String detail, Throwable cause) {
-        super(RpcStatusCommon.UNKNOWN_ERROR, cause);
-        this.detail = detail;
+        super(status, null);
+        this.detail = cause.getMessage();
     }
 
 }

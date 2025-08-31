@@ -25,7 +25,7 @@ public enum RpcStatusCommon implements RpcStatus {
     TOO_MANY_REQUESTS("请求过多"),
     GATEWAY_TIMEOUT("网关超时"),
     SERVICE_UNAVAILABLE("服务不可用"),
-    UNKNOWN_ERROR("未知错误");
+    UNKNOWN_ERROR("未归档异常,请联系技术支持");
 
     private String message;
 

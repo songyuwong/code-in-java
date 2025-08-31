@@ -9,7 +9,7 @@ import lombok.Data;
  * RPC 响应结果
  */
 @Data
-public abstract class RpcResponse {
+public abstract class RpcResponse<T> {
 
     /**
      * 响应状态
@@ -19,39 +19,39 @@ public abstract class RpcResponse {
     /**
      * 请求响应主体数据
      */
-    protected Object data;
+    protected T data;
 
-    public RpcResponse(RpcStatus status, Object data) {
+    public RpcResponse(RpcStatus status, T data) {
         this.status = status;
         this.data = data;
     }
 
-    public static RpcFaildResponse failed(RpcException cause) {
-        return new RpcFaildResponse(cause);
+    public static RpcFaildResponse<?> failed(RpcException cause) {
+        return new RpcFaildResponse<>(cause);
     }
 
-    public static RpcFaildResponse failed(RpcStatus status) {
-        return new RpcFaildResponse(status);
+    public static RpcFaildResponse<?> failed(RpcStatus status) {
+        return new RpcFaildResponse<>(status);
     }
 
-    public static RpcFaildResponse failed(RpcStatus status, Object data) {
-        return new RpcFaildResponse(status, data);
+    public static <T> RpcFaildResponse<?> failed(RpcStatus status, T data) {
+        return new RpcFaildResponse<>(status, data);
     }
 
-    public static RpcFaildResponse failed(String message) {
-        return new RpcFaildResponse(message);
+    public static RpcFaildResponse<?> failed(String message) {
+        return new RpcFaildResponse<>(message);
     }
 
-    public static RpcFaildResponse failed(RpcException rpcException, Object data) {
-        return new RpcFaildResponse(rpcException, data);
+    public static <T> RpcFaildResponse<T> failed(RpcException rpcException, T data) {
+        return new RpcFaildResponse<>(rpcException, data);
     }
 
-    public static RpcFaildResponse failed(String message, Object data) {
-        return new RpcFaildResponse(message, data);
+    public static <T> RpcFaildResponse<T> failed(String message, T data) {
+        return new RpcFaildResponse<>(message, data);
     }
 
-    public static RpcSucceedResponse succeed(Object data) {
-        return new RpcSucceedResponse(data);
+    public static <T> RpcSucceedResponse<T> succeed(T data) {
+        return new RpcSucceedResponse<>(data);
     }
 
 }

@@ -11,13 +11,13 @@ import lombok.EqualsAndHashCode;
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class RpcSucceedResponse extends RpcResponse {
+public class RpcSucceedResponse<T> extends RpcResponse<T> {
 
     public RpcSucceedResponse() {
         super(RpcStatusCommon.SUCCESS, null);
     }
 
-    public RpcSucceedResponse(Object data) {
+    public RpcSucceedResponse(T data) {
         super(RpcStatusCommon.SUCCESS, data);
     }
 

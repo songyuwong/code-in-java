@@ -1,4 +1,4 @@
-package com.drizzlepal.springboot.webstarter;
+package com.drizzlepal.springboot3.webstarter;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
