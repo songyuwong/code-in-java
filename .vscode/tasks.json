@@ -4,22 +4,23 @@
         {
             "label": "rebuild code-in-java",
             "type": "shell",
-            "command": "/workspace/mise/workdir/data/installs/mvnd/1.0.2/maven-mvnd-1.0.2-linux-amd64/bin/mvnd",
+            "command": "/home/songyu/data/mise/data/installs/mvnd/1.0.2/maven-mvnd-1.0.2-linux-amd64/bin/mvnd",
             "args": [
+                "-X",
+                "-e",
                 "-s",
-                "/workspace/maven-settings.xml",
+                "/home/songyu/data/projects/songyu/settings.xml",
                 "-f",
-                "/workspace/projects/code-in-java/pom.xml",
-                "-Dmaven.test.skip=true",
+                "/home/songyu/data/projects/songyu/code-in-java/pom.xml",
+                "'-Dmaven.test.skip=true'",
                 "clean",
                 "compile",
                 "package",
-                "install",
-                "deploy"
+                "install"
             ],
             "options": {
                 "env": {
-                    "JAVA_HOME": "/workspace/mise/workdir/data/installs/java/liberica-17.0.15+10"
+                    "JAVA_HOME": "/home/songyu/data/mise/data/installs/java/liberica-17.0.16+12"
                 }
             },
         },

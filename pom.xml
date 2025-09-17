@@ -206,19 +206,19 @@
         <repository>
             <id>localnexus</id>
             <name>Nexus Releases Repository</name>
-            <url>http://localhost:8081/repository/songyu-releases/</url>
+            <url>http://localhost:8081/repository/maven-common-local/</url>
         </repository>
         <snapshotRepository>
             <id>localnexus</id>
             <name>Nexus Snapshots Repository</name>
-            <url>http://localhost:8081/repository/songyu-snapshots/</url>
+            <url>http://localhost:8081/repository/maven-common-local/</url>
         </snapshotRepository>
     </distributionManagement>
 
     <pluginRepositories>
         <pluginRepository>
             <id>snapshots</id>
-            <url>http://localhost:8081/repository/maven-snapshots/</url>
+            <url>http://localhost:8081/repository/maven-common-local/</url>
             <snapshots>
                 <enabled>true</enabled>
                 <updatePolicy>always</updatePolicy>
